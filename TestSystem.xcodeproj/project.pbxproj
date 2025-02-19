@@ -10,22 +10,9 @@
 		22DE9A7E2D64898B00F53839 /* TestSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		227B064D2D666EBF00D7097C /* Exceptions for "TestSystem" folder in "TestSystem" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Screens/Untitled.swift,
-			);
-			target = 22DE9A7D2D64898B00F53839 /* TestSystem */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		22DE9A802D64898B00F53839 /* TestSystem */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				227B064D2D666EBF00D7097C /* Exceptions for "TestSystem" folder in "TestSystem" target */,
-			);
 			path = TestSystem;
 			sourceTree = "<group>";
 		};
