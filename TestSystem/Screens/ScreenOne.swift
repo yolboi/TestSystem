@@ -10,11 +10,7 @@ import SwiftUI
 struct ScreenOne: View {
     var body: some View {
         VStack (alignment: .leading){
-            HStack{
-                DefaultButton(title: "TouchScreen"){
-                    print("enter toucharea")
-                }
-            }
+            Text("hej jeg er hjemmeskærmen")
         }
         .padding()
     }
