@@ -1,5 +1,5 @@
 //
-//  Main.swift
+//  ScreenOne.swift
 //  TestSystem
 //
 //  Created by Jarl Boyd Roest on 18/02/2025.
@@ -7,18 +7,19 @@
 
 import SwiftUI
 
-struct MainScreen: View {
+struct ScreenOne: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        VStack (alignment: .leading){
+            HStack{
+                DefaultButton(title: "TouchScreen"){
+                    print("enter toucharea")
+                }
+            }
         }
         .padding()
     }
 }
 
 #Preview{
-    MainScreen()
+    ScreenOne()
 }
