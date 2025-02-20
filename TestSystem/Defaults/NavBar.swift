@@ -4,6 +4,8 @@
 //
 //  Created by Jarl Boyd Roest on 19/02/2025.
 //
+
+/*
 import SwiftUI
 
 // En container der sikrer, at navigationsbaren er synlig på alle skærme
@@ -97,3 +99,4 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+*/
