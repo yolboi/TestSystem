@@ -18,12 +18,12 @@ struct DefaultButton: View {
             Text(title)
                 .padding()
                 .foregroundColor(.white)
-                .background(Color.blue)
+                .background(Theme.button.buttonGradient)
                 .cornerRadius(8)
         }
     }
 }
-
+/*
 struct ButtonTest: View {
     var body: some View {
         TabView {
@@ -51,8 +51,8 @@ struct SecondScreen: View {
         Text("Dette er den anden skærm.")
     }
 }
-
+*/
 
 #Preview {
-    ButtonTest()
+    DefaultButton(title: "hej", action: {print ("hej")})
 }
