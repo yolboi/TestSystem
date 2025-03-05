@@ -24,7 +24,7 @@ struct DefaultButton: View {
     }
 }
 
-struct NavBar: View {
+struct ButtonTest: View {
     var body: some View {
         TabView {
             FirstScreen()
@@ -54,5 +54,5 @@ struct SecondScreen: View {
 
 
 #Preview {
-    NavBar()
+    ButtonTest()
 }

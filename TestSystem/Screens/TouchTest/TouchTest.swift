@@ -8,31 +8,50 @@
 import SwiftUI
 
 struct TouchTest: View {
-    let rows: Int = 5
-    let columns: Int = 5
-    @State var touched: [[Bool]]
-    
-    init() {
-        // Initialiser en 2D-array med false for alle felter.
-        _touched = State(initialValue: Array(repeating: Array(repeating: false, count: columns), count: rows))
-    }
-    
+    @StateObject private var viewModel = TouchTestM()
+    @State private var alertMessage: String = ""
+    @State private var showAlert: Bool = false
+        
     var body: some View {
-        VStack(spacing: 5) {
-            ForEach(0..<rows, id: \.self) { i in
+        VStack(spacing: 2) {
+            // Grid'et med rektangler, der skifter farve når de berøres
+            ForEach(0..<viewModel.rows, id: \.self) { i in
                 HStack(spacing: 2) {
-                    ForEach(0..<columns, id: \.self) { j in
+                    ForEach(0..<viewModel.columns, id: \.self) { j in
                         Rectangle()
-                            .fill(touched[i][j] ? Color.green : Color.gray)
+                            .fill(viewModel.touched[i][j] ? Color.green : Color.gray)
                             .frame(width: 60, height: 60)
                             .onTapGesture {
-                                touched[i][j] = true
+                                viewModel.markTouched(row: i, col: j)
                             }
+                        }
                     }
                 }
+                .padding()
+                
+            // Knap til at færdiggøre testen
+            Button("Finish Test") {
+                if viewModel.isTestCompleted() {
+                    alertMessage = "Test Passed!"
+                } else {
+                    alertMessage = "Test Failed: Please complete all fields."
+                }
+                showAlert = true
             }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text(alertMessage))
+            }
+                
+            // Knap til at nulstille testen
+            Button("Reset Test") {
+                viewModel.resetGrid()
+            }
+            .padding()
         }
-        .padding()
     }
 }
 
