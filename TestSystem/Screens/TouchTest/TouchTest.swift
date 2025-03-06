@@ -30,7 +30,7 @@ struct TouchTest: View {
                 .padding()
                 
             // Knap til at færdiggøre testen
-            Button("Finish Test") {
+            DefaultButton(title:"Finish Test") {
                 if viewModel.isTestCompleted() {
                     alertMessage = "Test Passed!"
                 } else {
@@ -38,16 +38,16 @@ struct TouchTest: View {
                 }
                 showAlert = true
             }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
+            //.padding()
+            //.background(Color.blue)
+            //.foregroundColor(.white)
+            //.cornerRadius(10)
             .alert(isPresented: $showAlert) {
                 Alert(title: Text(alertMessage))
             }
                 
             // Knap til at nulstille testen
-            Button("Reset Test") {
+        SecondaryButton(title:"Reset Test") {
                 viewModel.resetGrid()
             }
             .padding()

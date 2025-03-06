@@ -23,6 +23,20 @@ struct DefaultButton: View {
         }
     }
 }
+
+struct SecondaryButton: View {
+    let title: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action){
+            Text(title)
+                .foregroundColor(Theme.button.accentColor)
+                .overlay(Theme.button.buttonGradient)
+                .mask(Text(title))
+        }
+    }
+}
 /*
 struct ButtonTest: View {
     var body: some View {
@@ -54,5 +68,5 @@ struct SecondScreen: View {
 */
 
 #Preview {
-    DefaultButton(title: "hej", action: {print ("hej")})
+    SecondaryButton(title: "hej", action: {print ("hej")})
 }
