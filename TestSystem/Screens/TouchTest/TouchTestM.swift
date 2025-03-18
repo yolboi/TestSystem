@@ -8,8 +8,8 @@
 import SwiftUI
 
 class TouchTestM: ObservableObject{
-    let rows: Int = 5
-    let columns: Int = 5
+    let rows: Int = 20
+    let columns: Int = 10
        
     @Published var touched: [[Bool]]
        
@@ -20,7 +20,9 @@ class TouchTestM: ObservableObject{
        
        // Marker et specifikt felt som berørt
     func markTouched(row: Int, col: Int) {
-        touched[row][col] = true
+        if !touched[row][col]{
+            touched[row][col] = true
+        }
     }
        
     // Nulstil grid'et
