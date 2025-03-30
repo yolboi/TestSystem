@@ -37,6 +37,35 @@ struct SecondaryButton: View {
         }
     }
 }
+
+struct PicButton: View {
+    let title: String
+    let image: Image
+
+    var body: some View {
+            VStack(spacing: 12) {
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(.blue)
+
+                Divider() // ← linjen mellem billede og tekst
+
+                Text(title)
+                    .foregroundColor(Theme.button.accentColor)
+                    .overlay(Theme.button.buttonGradient)
+                    .mask(Text(title))
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Theme.button.accentColor, lineWidth: 0.5)
+            )
+        .buttonStyle(PlainButtonStyle()) // så den ikke får blå highlight
+        .frame(width: 120, height: 120) // ← kompakt størrelse du kan ændre!
+    }
+}
 /*
 struct ButtonTest: View {
     var body: some View {
@@ -68,5 +97,5 @@ struct SecondScreen: View {
 */
 
 #Preview {
-    SecondaryButton(title: "hej", action: {print ("hej")})
+    PicButton(title: "hej", image: Image(systemName: "swift"))
 }

@@ -7,19 +7,39 @@
 
 import SwiftUI
 
-struct Hej: View {
+struct ContentView: View {
+    @EnvironmentObject var navModel: NavigationModel
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            NavigationStack(path: $navModel.path) {
+                ScreenOne()
+                    .navigationDestination(for: TestType.self) { test in
+                        switch test {
+                        case .screen:
+                            TouchTest()
+                        case .speaker:
+                            Text("Lydtest kommer...")
+                        case .faceID:
+                            Text("Face ID test")
+                        case .battery:
+                            Text("Batteritest")
+                        }
+                    }
+            }
+            .tabItem {
+                Label("Home", systemImage: "house.fill")
+            }
+
+            NavigationStack {
+                ScreenTwo()
+            }
+            .tabItem {
+                Label("Settings", systemImage: "gearshape.fill")
+            }
         }
-        .padding()
+        .toolbarBackground(Color.blue, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
+        .accentColor(.blue)
     }
 }
-
-#Preview{
-    Hej()
-}
-

@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct TestSystemApp: App {
+    @StateObject private var navModel = NavigationModel()
+
     var body: some Scene {
         WindowGroup {
-            ScreenOne()
+            ContentView()
+                .environmentObject(navModel)
         }
     }
 }
