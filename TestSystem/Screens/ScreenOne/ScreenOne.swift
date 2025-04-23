@@ -11,10 +11,11 @@ struct ScreenOne: View {
     @EnvironmentObject var navModel: NavigationModel
 
     let menuItems: [TestMenuItem] = [
-        TestMenuItem(title: "Screen", icon: "display", testType: .screen),
-        TestMenuItem(title: "Højttaler", icon: "speaker.wave.2.fill", testType: .speaker),
+        TestMenuItem(title: "Touch", icon: "iphone.gen3", testType: .screen),
+        TestMenuItem(title: "Haptic Touch", icon: "dot.circle.and.hand.point.up.left.fill", testType: .threeD),
         TestMenuItem(title: "Face ID", icon: "faceid", testType: .faceID),
-        TestMenuItem(title: "Batteri", icon: "battery.100", testType: .battery)
+        TestMenuItem(title: "Battery", icon: "battery.50", testType: .battery),
+        TestMenuItem(title: "True Tone", icon: "circle.tophalf.filled", testType: .trueTone)
     ]
 
     let columns = [

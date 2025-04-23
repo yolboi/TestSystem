@@ -14,7 +14,7 @@ struct ThreeDtouchTestView: View {
             Text("Touch firmly on the button below")
             .font(.title)
         
-            DefaultButton(title:"Fail Haptic Feedback test", action: {testResult = "Failed"})
+            DefaultButton(title:"Haptic Feedback test", action: {testResult = "Failed"})
                 .contextMenu{
                     Button("Tab to pass the test"){
                         testResult = "Passed"

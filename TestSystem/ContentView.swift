@@ -12,34 +12,43 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
+            // Home Tab med StartScreen & navigation
             NavigationStack(path: $navModel.path) {
-                ScreenOne()
+                StartScreen()
+                    .navigationDestination(for: UserType.self) { user in
+                        switch user {
+                        case .technicianTest:
+                            ScreenOne()
+                        case .customerSell:
+                            ScreenOne()
+                        
+                        }
+                    }
                     .navigationDestination(for: TestType.self) { test in
                         switch test {
-                        case .screen:
-                            TouchTest()
-                        case .speaker:
-                            Text("Lydtest kommer...")
-                        case .faceID:
-                            Text("Face ID test")
-                        case .battery:
-                            Text("Batteritest")
+                        case .screen: TouchTest()
+                        case .threeD: ThreeDtouchTestView()
+                        case .faceID: ShakeTestView()
+                        case .trueTone: TrueToneCheckView{navModel.navigate(to: .technicianTest)}
+                        case .battery: BatteryTestView()
                         }
                     }
             }
-            .tabItem {
-                Label("Home", systemImage: "house.fill")
-            }
+            .tabItem { Label("Home", systemImage: "house.fill") }
 
+            // Settings Tab
             NavigationStack {
-                ScreenTwo()
+                SettingsView()
             }
-            .tabItem {
-                Label("Settings", systemImage: "gearshape.fill")
-            }
+            .tabItem { Label("Settings", systemImage: "gearshape.fill") }
         }
         .toolbarBackground(Color.blue, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
         .accentColor(.blue)
     }
 }
+
+//dummies
+//struct FaceIDTestView: View { var body: some View { Text("Face ID Test") }}
+struct BatteryTestView: View { var body: some View {Text("BatteryTestView")}}
+struct SettingsView: View { var body: some View {Text("Settings")}}

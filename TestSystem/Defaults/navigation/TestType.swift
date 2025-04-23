@@ -7,9 +7,15 @@
 
 import Foundation
 
+enum UserType: Hashable {
+    case technicianTest
+    case customerSell
+}
+
 enum TestType: Hashable {
     case screen
-    case speaker
+    case threeD
     case faceID
     case battery
+    case trueTone
 }

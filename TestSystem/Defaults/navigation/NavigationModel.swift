@@ -9,4 +9,12 @@ import SwiftUI
 
 class NavigationModel: ObservableObject {
     @Published var path = NavigationPath()
+
+    func navigate(to user: UserType) {
+        path.append(user)
+    }
+
+    func navigate(to test: TestType) {
+        path.append(test)
+    }
 }
