@@ -5,6 +5,7 @@
 //  Created by Jarl Boyd Roest on 18/02/2025.
 //
 
+
 import SwiftUI
 
 struct ContentView: View {
@@ -31,6 +32,8 @@ struct ContentView: View {
                         case .faceID: ShakeTestView()
                         case .trueTone: TrueToneCheckView{navModel.navigate(to: .technicianTest)}
                         case .battery: BatteryTestView()
+                        case .location: MapScreen()
+                        case .ear: EarpieceView()
                         }
                     }
             }

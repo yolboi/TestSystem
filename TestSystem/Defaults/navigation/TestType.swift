@@ -18,4 +18,6 @@ enum TestType: Hashable {
     case faceID
     case battery
     case trueTone
+    case location
+    case ear
 }

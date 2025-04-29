@@ -22,8 +22,8 @@ struct ShakeTestView: View {
         .padding()
         .onReceive(detector.$shakeDetected) { didShake in
             if didShake {
-                statusText = "Shake registreret! ✅"
-                // Her kan du evt. navigere videre:
+                statusText = "Shake registreret! "
+                // evt. navigere videre:
                 // navModel.navigate(to: .threeD)
             }
         }

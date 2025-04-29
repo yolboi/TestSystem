@@ -15,7 +15,9 @@ struct ScreenOne: View {
         TestMenuItem(title: "Haptic Touch", icon: "dot.circle.and.hand.point.up.left.fill", testType: .threeD),
         TestMenuItem(title: "Face ID", icon: "faceid", testType: .faceID),
         TestMenuItem(title: "Battery", icon: "battery.50", testType: .battery),
-        TestMenuItem(title: "True Tone", icon: "circle.tophalf.filled", testType: .trueTone)
+        TestMenuItem(title: "True Tone", icon: "circle.tophalf.filled", testType: .trueTone),
+        TestMenuItem(title: "GPS", icon: "location.fill", testType: .location),
+        TestMenuItem(title: "Audio", icon: "ear.badge.waveform", testType: .ear)
     ]
 
     let columns = [
