@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+
+# Xcode user data
+*.xcuserstate
+*.xcscmblueprint
+*.xcworkspace/xcuserdata
+*.xcodeproj/xcuserdata
+*.xcodeproj/project.xcworkspace/xcuserdata
+
+# Derived data
+build/
+DerivedData/
+
+# SwiftPM
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Secrets
+GoogleService-Info.plist
+*.entitlements
