@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var navModel: NavigationModel
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
 
     var body: some View {
         TabView {
@@ -31,7 +32,7 @@ struct ContentView: View {
                         case .threeD: ThreeDtouchTestView()
                         case .shake: ShakeTestView()
                         case .trueTone: TrueToneCheckView{navModel.navigate(to: .technicianTest)}
-                        case .battery: BatteryTest()
+                        case .battery: BatteryTestView(testOverviewVM: testOverviewVM)
                         case .location: MapScreen()
                         case .ear: EarpieceView()
                         case .pixel: PixelTestView()

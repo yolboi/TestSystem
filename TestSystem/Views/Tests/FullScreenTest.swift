@@ -26,14 +26,11 @@ struct FullScreenTestView: View {
                 TrueToneCheckView(onComplete: vm.goToNextStep)
 
             case .done:
-                VStack {
-                    Text("✅ Skærmtest færdig")
-                        .font(.largeTitle)
-                        .padding()
-                    DefaultButton(title: "Tilbage til start") {
-                        // evt. navModel.popToRoot() eller noget lign.
-                    }
-                }
+                TestCompletionView(
+                    title: "✅ Skærmtest færdig",
+                    message: "Du er nu færdig med hele skærmtesten",
+                    buttonText: "Tilbage til testmenu"
+                )
             }
         }
     }

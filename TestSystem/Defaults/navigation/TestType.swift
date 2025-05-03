@@ -12,7 +12,7 @@ enum UserType: Hashable {
     case customerSell
 }
 
-enum TestType: Hashable {
+enum TestType: String, Codable, Hashable {
     case screen
     case threeD
     case shake
@@ -26,4 +26,14 @@ enum TestType: Hashable {
 
 enum ScreenTestStep: CaseIterable {
     case touch, pixel, threeD, trueTone, done
+
+    var testType: TestType? {
+        switch self {
+        case .touch: return .screen
+        case .pixel: return .pixel
+        case .threeD: return .threeD
+        case .trueTone: return .trueTone
+        case .done: return nil
+        }
+    }
 }

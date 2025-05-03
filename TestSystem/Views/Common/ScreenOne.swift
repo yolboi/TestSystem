@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ScreenOne: View {
     @EnvironmentObject var navModel: NavigationModel
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
 
     let fullTests: [FullTests] = [
         FullTests(title: "full screen", icon: "iphone", testType: .fullScreen)
@@ -30,6 +31,20 @@ struct ScreenOne: View {
         GridItem(.flexible())
     ]
 
+    //måske ryk den her et andet sted hen
+    func testStatusIcon(for type: TestType) -> Image? {
+        guard let result = testOverviewVM.results.first(where: { $0.testType == type && $0.confirmed }) else {
+            return nil
+        }
+
+        // Ekstra sikkerhed: check at testen er nyere end en vis dato
+        if result.timestamp < Date(timeIntervalSinceNow: -1) { // f.eks. 1 sekund gammel
+            return nil
+        }
+
+        return Image(systemName: result.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
+    }
+    
     var body: some View {
         ScrollView {
             
@@ -39,7 +54,15 @@ struct ScreenOne: View {
                     Button {
                         navModel.path.append(item.testType)
                     } label: {
-                        PicButton(title: item.title, image: Image(systemName: item.icon))
+                        ZStack(alignment: .topTrailing) {
+                            PicButton(title: item.title, image: Image(systemName: item.icon))
+
+                            if let icon = testStatusIcon(for: item.testType) {
+                                icon
+                                    .foregroundColor(icon == Image(systemName: "checkmark.circle.fill") ? .green : .red)
+                                    .offset(x: 10, y: -10)
+                            }
+                        }
                     }
                 }
             }
@@ -56,7 +79,15 @@ struct ScreenOne: View {
                     Button {
                         navModel.path.append(item.testType)
                     } label: {
-                        PicButton(title: item.title, image: Image(systemName: item.icon))
+                        ZStack(alignment: .topTrailing) {
+                            PicButton(title: item.title, image: Image(systemName: item.icon))
+
+                            if let icon = testStatusIcon(for: item.testType) {
+                                icon
+                                    .foregroundColor(icon == Image(systemName: "checkmark.circle.fill") ? .green : .red)
+                                    .offset(x: 10, y: -10)
+                            }
+                        }
                     }
                 }
             }

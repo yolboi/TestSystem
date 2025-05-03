@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct TestSystemApp: App {
     @StateObject private var navModel = NavigationModel()
+    @StateObject private var testObservableObject = TestOverviewViewModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(navModel)
+                .environmentObject(testObservableObject)
         }
     }
 }
