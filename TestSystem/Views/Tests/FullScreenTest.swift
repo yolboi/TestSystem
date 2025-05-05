@@ -27,9 +27,9 @@ struct FullScreenTestView: View {
 
             case .done:
                 TestCompletionView(
-                    title: "✅ Skærmtest færdig",
-                    message: "Du er nu færdig med hele skærmtesten",
-                    buttonText: "Tilbage til testmenu"
+                    title: "Full ScreenTest is done",
+                    message: "You've completed the full screen test",
+                    buttonText: "Back to Homescreen"
                 )
             }
         }

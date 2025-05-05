@@ -12,15 +12,28 @@ import SwiftUI
 struct DefaultButton: View {
     let title: String
     let action: () -> Void
+    var isEnabled: Bool = true // <-- vigtig defaultværdi
 
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            if isEnabled {
+                action()
+            }
+        }) {
             Text(title)
+                .frame(maxWidth: .infinity)
                 .padding()
+                .background {
+                    if isEnabled {
+                        Theme.button.buttonGradient
+                    } else {
+                        Color.gray
+                    }
+                }
                 .foregroundColor(.white)
-                .background(Theme.button.buttonGradient)
                 .cornerRadius(8)
         }
+        .disabled(!isEnabled)
     }
 }
 
@@ -50,7 +63,7 @@ struct PicButton: View {
                     .frame(width: 40, height: 40)
                     .foregroundColor(.blue)
 
-                Divider() // ← linjen mellem billede og tekst
+                Divider()
 
                 Text(title)
                     .foregroundColor(Theme.button.accentColor)
@@ -66,35 +79,6 @@ struct PicButton: View {
         .frame(width: 120, height: 120) // ← kompakt størrelse du kan ændre!
     }
 }
-/*
-struct ButtonTest: View {
-    var body: some View {
-        TabView {
-            FirstScreen()
-                .tabItem {
-                    Label("Første", systemImage: "1.circle")
-                }
-            
-            SecondScreen()
-                .tabItem {
-                    Label("Anden", systemImage: "2.circle")
-                }
-        }
-    }
-}
-
-struct FirstScreen: View {
-    var body: some View {
-        Text("Dette er den første skærm.")
-    }
-}
-
-struct SecondScreen: View {
-    var body: some View {
-        Text("Dette er den anden skærm.")
-    }
-}
-*/
 
 #Preview {
     PicButton(title: "hej", image: Image(systemName: "swift"))

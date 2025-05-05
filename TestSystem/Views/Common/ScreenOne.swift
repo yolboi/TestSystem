@@ -93,6 +93,7 @@ struct ScreenOne: View {
             }
             .padding()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

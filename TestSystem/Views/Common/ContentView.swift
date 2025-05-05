@@ -44,7 +44,7 @@ struct ContentView: View {
 
             // Settings Tab
             NavigationStack {
-                SettingsView()
+                ScreenTwo()
             }
             .tabItem { Label("Settings", systemImage: "gearshape.fill") }
         }
@@ -53,7 +53,3 @@ struct ContentView: View {
         .accentColor(.blue)
     }
 }
-
-//dummies
-//struct FaceIDTestView: View { var body: some View { Text("Face ID Test") }}
-struct SettingsView: View { var body: some View {Text("Settings")}}

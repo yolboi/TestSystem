@@ -10,12 +10,12 @@ import SwiftUI
 struct StartScreen: View {
     @EnvironmentObject var navModel: NavigationModel
     @State private var userType: UserType = .technicianTest
-    @State private var showTerms: Bool = true
+    @State private var showTerms = false
 
     var body: some View {
         VStack(spacing: 20) {
             Text("Velkommen!").font(.largeTitle).bold()
-            Text("Hvad ønsker du at teste med din telefon?")
+            Text("")
                 .font(.headline)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
@@ -27,19 +27,30 @@ struct StartScreen: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
 
-            Button("Fortsæt") {
-                navModel.navigate(to: userType)
+            DefaultButton(title: "Fortsæt") {
+                if userType == .customerSell {
+                    showTerms = true // 👉 vis TermsView
+                } else {
+                    navModel.navigate(to: userType) // 👉 direkte videre
+                }
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
             .cornerRadius(8)
             .padding(.horizontal)
         }
         .padding()
         .fullScreenCover(isPresented: $showTerms) {
             TermsView(isPresented: $showTerms)
+                .interactiveDismissDisabled(true)
+                .onDisappear {
+                    navModel.navigate(to: userType)
+                }
         }
     }
+}
+
+
+#Preview {
+    StartScreen()
 }

@@ -7,16 +7,24 @@
 import SwiftUI
 
 struct ScreenTwo: View {
-    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    let name = UIDevice.current.name             // "Jarl’s iPhone"
+    let systemName = UIDevice.current.systemName // "iOS"
+    let systemVersion = UIDevice.current.systemVersion // "17.4"
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Hej jeg er nr. 2 skærm")
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Enhedsoplysninger")
+                .font(.title)
+
+            Text("Model: \(DeviceInfoService.readableModelName())")
+            Text("Navn: \(name)")
+            Text("System: \(systemName) \(systemVersion)")
+
+            // imei feldt
+            
+            
         }
         .padding()
-        .onAppear {
-            testOverviewVM.clearAll()
-        }
     }
 }
 

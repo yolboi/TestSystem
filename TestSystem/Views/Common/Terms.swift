@@ -8,19 +8,25 @@ import SwiftUI
 
 struct TermsView: View {
     @Binding var isPresented: Bool
-    @State private var hasScrolledToBottom = false
     @State private var accepted = false
+    @State private var hasScrolledToBottom = false
+
     private let termsText = loadTerms()
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Vilkår og Betingelser").font(.title2).bold().padding(.top)
+            Text("Vilkår og Betingelser")
+                .font(.title2)
+                .bold()
+                .padding(.top)
+
             ScrollView {
-                Text(termsText).padding()
+                Text(termsText)
+                    .padding()
                     .background(
                         GeometryReader { proxy in
                             Color.clear
-                                .onChange(of: proxy.frame(in: .global).maxY) { value in
+                                .onChange(of: proxy.frame(in: .global).maxY) { value in // nødvendig siden at der nok ellers skal laves en ny sctruct
                                     let screenHeight = UIScreen.main.bounds.height
                                     if value < screenHeight {
                                         hasScrolledToBottom = true
@@ -29,23 +35,33 @@ struct TermsView: View {
                         }
                     )
             }
-            .frame(maxHeight: 300)
-            .border(Color.gray)
 
-            Toggle("Jeg erklærer, at alle oplysninger er 100% sande. Falske oplysninger medfører gebyr.", isOn: $accepted)
+            Button(action: {
+                accepted.toggle()
+            }) {
+                HStack(alignment: .top) {
+                    Image(systemName: accepted ? "checkmark.square.fill" : "square")
+                        .foregroundColor(accepted ? .blue : .gray)
+                    Text("I declare that all information is 100% true. False information will result in a fee")
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(.leading)
+                }
                 .padding(.horizontal)
-
-            Button(action: { isPresented = false }) {
-                Text("Accepter og fortsæt")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background((accepted && hasScrolledToBottom) ? Color.blue : Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
             }
-            .disabled(!(accepted && hasScrolledToBottom))
-            .padding(.horizontal)
+            .buttonStyle(.plain)
+
+            DefaultButton(title: "Accepter og fortsæt", action: {
+                isPresented = false
+            }, isEnabled: accepted && hasScrolledToBottom)
+            
+            .frame(maxWidth: 300) // eller en anden passende bredde
+            .padding()
+            .foregroundColor(.white)
+            .cornerRadius(8)
+            
             Spacer()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
