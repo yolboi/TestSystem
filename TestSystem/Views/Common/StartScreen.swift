@@ -14,20 +14,20 @@ struct StartScreen: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("Velkommen!").font(.largeTitle).bold()
+            Text("Welcome to TestSystem").font(.largeTitle).bold()
             Text("")
                 .font(.headline)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
-            Picker("Jeg er en…", selection: $userType) {
-                Text("Tekniker").tag(UserType.technicianTest)
-                Text("Kunde").tag(UserType.customerSell)
+            Picker("I'm a:", selection: $userType) {
+                Text("Technician").tag(UserType.technicianTest)
+                Text("Costumer").tag(UserType.customerSell)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
 
-            DefaultButton(title: "Fortsæt") {
+            DefaultButton(title: "Continue") {
                 if userType == .customerSell {
                     showTerms = true // 👉 vis TermsView
                 } else {

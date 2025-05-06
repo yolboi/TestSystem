@@ -23,7 +23,8 @@ struct ScreenOne: View {
         TestMenuItem(title: "True Tone", icon: "circle.tophalf.filled", testType: .trueTone),
         TestMenuItem(title: "GPS", icon: "location.fill", testType: .location),
         TestMenuItem(title: "Audio", icon: "ear.badge.waveform", testType: .ear),
-        TestMenuItem(title: "Pixel", icon: "timelapse", testType: .pixel)
+        TestMenuItem(title: "Pixel", icon: "timelapse", testType: .pixel),
+        TestMenuItem(title: "Camera", icon: "camera.shutter.button", testType: .camera)
     ]
 
     let columns = [

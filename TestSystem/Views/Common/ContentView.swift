@@ -37,6 +37,7 @@ struct ContentView: View {
                         case .ear: EarpieceView()
                         case .pixel: PixelTestView()
                         case .fullScreen: FullScreenTestView()
+                        case .camera: CameraTestView()
                         }
                     }
             }

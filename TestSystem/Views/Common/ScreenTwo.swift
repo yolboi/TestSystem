@@ -13,12 +13,12 @@ struct ScreenTwo: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Enhedsoplysninger")
+            Text("About Device:")
                 .font(.title)
 
             Text("Model: \(DeviceInfoService.readableModelName())")
-            Text("Navn: \(name)")
-            Text("System: \(systemName) \(systemVersion)")
+            Text("Name: \(name)")
+            Text("OS: \(systemName) \(systemVersion)")
 
             // imei feldt
             

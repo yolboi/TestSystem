@@ -15,7 +15,7 @@ struct TermsView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Vilkår og Betingelser")
+            Text("Therms and Conditions")
                 .font(.title2)
                 .bold()
                 .padding(.top)
@@ -51,7 +51,7 @@ struct TermsView: View {
             }
             .buttonStyle(.plain)
 
-            DefaultButton(title: "Accepter og fortsæt", action: {
+            DefaultButton(title: "Accept and continue", action: {
                 isPresented = false
             }, isEnabled: accepted && hasScrolledToBottom)
             

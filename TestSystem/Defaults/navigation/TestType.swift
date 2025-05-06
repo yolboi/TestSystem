@@ -22,6 +22,7 @@ enum TestType: String, Codable, Hashable {
     case ear
     case pixel
     case fullScreen
+    case camera
 }
 
 enum ScreenTestStep: CaseIterable {
