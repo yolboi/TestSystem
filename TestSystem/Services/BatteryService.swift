@@ -7,7 +7,6 @@
 
 import UIKit
 import Foundation
-import UIDeviceListener
 
 class BatteryService: ObservableObject {
     @Published var batteryLevel: Float = UIDevice.current.batteryLevel
@@ -49,30 +48,5 @@ class BatteryService: ObservableObject {
         case .unknown: return "Unknown"
         @unknown default: return "Unknown"
         }
-    }
-}
-
-struct BatteryAdvancedInfo {
-    let currentCapacity: Int
-    let maxCapacity: Int
-    let designCapacity: Int
-    let cycleCount: Int
-}
-
-class BatteryInfoService {
-    static func fetchBatteryAdvancedInfo() -> BatteryAdvancedInfo? {
-        guard let listener = UIDeviceListener.shared else { return nil }
-
-        let capacity = listener.query(key: .batteryRawCurrentCapacity) as? Int ?? -1
-        let maxCapacity = listener.query(key: .batteryRawMaxCapacity) as? Int ?? -1
-        let designCapacity = listener.query(key: .batteryDesignCapacity) as? Int ?? -1
-        let cycles = listener.query(key: .batteryCycleCount) as? Int ?? -1
-
-        return BatteryAdvancedInfo(
-            currentCapacity: capacity,
-            maxCapacity: maxCapacity,
-            designCapacity: designCapacity,
-            cycleCount: cycles
-        )
     }
 }
