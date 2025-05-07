@@ -33,13 +33,9 @@ struct ScreenOne: View {
     ]
 
     //måske ryk den her et andet sted hen
+    @MainActor
     func testStatusIcon(for type: TestType) -> Image? {
         guard let result = testOverviewVM.results.first(where: { $0.testType == type && $0.confirmed }) else {
-            return nil
-        }
-
-        // Ekstra sikkerhed: check at testen er nyere end en vis dato
-        if result.timestamp < Date(timeIntervalSinceNow: -1) { // f.eks. 1 sekund gammel
             return nil
         }
 
@@ -102,4 +98,3 @@ struct ScreenOne: View {
     ScreenOne()
         .environmentObject(NavigationModel())
 }
-

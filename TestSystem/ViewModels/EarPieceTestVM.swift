@@ -5,39 +5,52 @@
 //  Created by Jarl Boyd Roest on 29/04/2025.
 //
 
-import AVFoundation
 import Foundation
+import AVFoundation
+import Combine
 
-class EarpieceTest {
-    static let shared = EarpieceTest()
-    private let synthesizer = AVSpeechSynthesizer()
-    private var audioPlayer = AVAudioSession.sharedInstance()
-    
-    func earSpeakerTest (text: String, image: String,earSpeaker: Bool) {
-        do {
-            if earSpeaker {
-                try audioPlayer.setCategory(.playAndRecord, options: .duckOthers)
-            } else {
-                try audioPlayer.setCategory(.playAndRecord, options: .defaultToSpeaker)
-            }
-            try audioPlayer.setActive(true)
-        } catch {
-            print("error")
+class EarpieceTestVM: ObservableObject {
+    @Published var statusText: String = "Press to start the audio test"
+    @Published var statusImage: String = "iphone.gen3.badge.play"
+    @Published var testCompleted: Bool = false
+
+    private let audioService = EarpieceAudioService()
+    private var testMode: Int = 0
+
+    func startTest() {
+        if testMode % 2 == 0 {
+            statusText = "Testing speaker"
+            statusImage = "speaker.3.fill"
+            audioService.play(text: "Testing speaker", earSpeaker: false)
+        } else {
+            statusText = "Testing earpiece"
+            statusImage = "ear.badge.waveform"
+            audioService.play(text: "Testing earpiece", earSpeaker: true)
+            testCompleted = true
         }
-        let utterance = AVSpeechUtterance(string: "hello")
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-        utterance.voice = AVSpeechSynthesisVoice(language: "id-ID")
-        
-        synthesizer.speak(utterance)
+        testMode += 1
+    }
+
+    func stopTest() {
+        audioService.stop()
+        statusText = "Test stopped"
+        statusImage = "memories"
+    }
+
+    func finishTest(using testOverviewVM: TestOverviewViewModel) {
+        let result = TestResult(
+            testType: .ear,
+            passed: testCompleted,
+            timestamp: Date(),
+            notes: testCompleted ? nil : "Test not completed",
+            confirmed: true
+        )
+
+        // Antager at TestOverviewViewModel har en metode der håndterer opdatering/tilføjelse
+        testOverviewVM.addResult(result)
     }
     
-    func stopSpeaking() {
-        synthesizer.stopSpeaking(at: .immediate)
-        
-        do {
-            try audioPlayer.setActive(false)
-        } catch {
-            print("error")
-        }
+    func runTestCycle(mode: Int) {
+        startTest()
     }
 }

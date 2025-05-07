@@ -17,4 +17,10 @@ class NavigationModel: ObservableObject {
     func navigate(to test: TestType) {
         path.append(test)
     }
+
+    func goBack() {
+        if !path.isEmpty {
+            path.removeLast()
+        }
+    }
 }

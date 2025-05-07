@@ -39,7 +39,7 @@ class BatteryTestViewModel: ObservableObject {
             notes: testPassed ? nil : "Telefonen blev ikke opladt",
             confirmed: true // <-- vigtigt!
         )
-        print("Saving result:", result)
+        print("Saving result: \(result)")
         testOverviewVM.addResult(result)
     }
 }

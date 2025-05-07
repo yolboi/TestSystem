@@ -32,6 +32,7 @@ struct ScreenTwo: View {
                     .font(.title2)
                 
                 
+                
             }
             .padding()
         }

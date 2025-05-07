@@ -7,52 +7,54 @@
 import SwiftUI
 
 struct EarpieceView: View {
-    private let atm = EarpieceTest()
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    @EnvironmentObject var navModel: NavigationModel
+    @StateObject private var vm = EarpieceTestVM()
     @State private var testMode = 0
-    @State private var statusText = "Tryk for at starte højtalertest"
-    @State private var statusImage = "iphone.gen3.badge.play"
 
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: statusImage)
+            Image(systemName: vm.statusImage)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 80, height: 100)
                 .padding(.top, 30)
 
             Spacer()
-            
-            Text("Test info her")
+
+            Text("Speaker & Earpiece Test")
                 .font(.headline)
-            
+
             Spacer()
-            
-            Text(statusText)
+
+            Text(vm.statusText)
                 .font(.headline)
                 .padding()
 
             DefaultButton(title: "Start Audiotest") {
-                if testMode % 2 == 0 {
-                    statusText = "Testing speaker"
-                    statusImage = "speaker.3.fill"
-                    atm.earSpeakerTest(text: "Testing speaker", image: "speaker.3.fill", earSpeaker: false)
-                } else {
-                    statusText = "Testing Earpiece"
-                    statusImage = "ear.badge.waveform"
-                    atm.earSpeakerTest(text: "Testing Earpiece", image: "ear.badge.waveform", earSpeaker: true)
-                }
+                vm.runTestCycle(mode: testMode)
                 testMode += 1
             }
 
-            SecondaryButton(title: "End test") {
-                atm.stopSpeaking()
-                statusText = "Test stoppet"
-                statusImage = "memories"
+            if vm.testCompleted {
+                Text("Test completed")
+                    .foregroundColor(.green)
+
+                SecondaryButton(title: "End Test") {
+                    vm.finishTest(using: testOverviewVM)
+                    navModel.goBack()
+                }
+            } else {
+                SecondaryButton(title: "Stop Test") {
+                    vm.stopTest()
+                    navModel.goBack()
+                }
             }
         }
         .padding()
     }
 }
+
 #Preview {
     EarpieceView()
 }
