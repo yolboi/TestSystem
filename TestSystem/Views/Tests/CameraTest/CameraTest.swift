@@ -8,38 +8,52 @@
 import SwiftUI
 
 struct CameraTestView: View {
-    @StateObject private var vm = CameraTestViewModel()
+    @StateObject private var vm: CameraTestViewModel
     @State private var showCamera = false
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    init(testOverviewVM: TestOverviewViewModel) {
+        _vm = StateObject(wrappedValue: CameraTestViewModel(testOverviewVM: testOverviewVM))
+    }
+
     
     var body: some View {
         VStack(spacing: 20) {
-            if vm.currentLensIndex < vm.lensOrder.count {
-                Text("Take a picture using the: \(vm.lensOrder[vm.currentLensIndex])-lens")
-                    .font(.headline)
+            if !vm.testCompleted {
+                Text("Take a picture with: \(vm.lensOrder[vm.currentLensIndex].rawValue)-lens")
+
+                SecondaryButton(title: "Take picture") {
+                    showCamera = true
+                }
             } else {
                 Text("All lenses are tested")
                     .font(.headline)
+                    .foregroundColor(.green)
+
+                SecondaryButton(title: "End Test") {
+                    vm.finishTest()
+                }
             }
             
-            SecondaryButton(title: "Take picture") {
-                showCamera = true
-            }
-            LazyVGrid(columns: columns, spacing: 20) {
+            
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                 ForEach(vm.capturedImages, id: \.self) { image in
                     Image(uiImage: image)
                         .resizable()
-                        .padding()
-                        .frame(height: 200)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .scaledToFit()
+                        .frame(height: 150)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
                 }
             }
+            
             if vm.testCompleted {
-                Text("All lenses are tested")
+                Text("All pictures is captured")
+                    .foregroundColor(.green)
+                    .font(.title3)
+
+                DefaultButton(title: "End test") {
+                    vm.finishTest()
+                }
             }
         }
         .sheet(isPresented: $showCamera) {
