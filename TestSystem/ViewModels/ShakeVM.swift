@@ -9,7 +9,7 @@ import Foundation
 import CoreMotion
 
 /// ObservableObject der publiserer et shake-event
-class ShakeDetector: ObservableObject {
+class ShakeTestViewModel: ObservableObject {
     private let motionManager = CMMotionManager()
     private let queue = OperationQueue()
     

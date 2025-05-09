@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct FullScreenTestView: View {
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    @EnvironmentObject var navModel: NavigationModel
+    
     @StateObject var vm = FullScreenTestViewModel()
     
     var body: some View {
@@ -21,10 +24,14 @@ struct FullScreenTestView: View {
 
             case .threeD:
                 ThreeDtouchTestView(onComplete: vm.goToNextStep)
+                    .environmentObject(testOverviewVM)
+                    .environmentObject(navModel)
 
             case .trueTone:
-                TrueToneCheckView(onComplete: vm.goToNextStep)
-
+                TrueToneView(onComplete: vm.goToNextStep)
+                    .environmentObject(testOverviewVM)
+                    .environmentObject(navModel)
+                
             case .done:
                 TestCompletionView(
                     title: "Full ScreenTest is done",

@@ -8,23 +8,45 @@
 import SwiftUI
 
 struct ShakeTestView: View {
-    @StateObject private var detector = ShakeDetector()
-    @State private var statusText = "Ryst telefonen for at teste"
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    @EnvironmentObject var navModel: NavigationModel
+    var fullScreenVM: FullScreenTestViewModel? = nil
+
+    @StateObject private var viewModel = ShakeTestViewModel()
+    private let shakeService = ShakeTestService()
+
+    @State private var testCompleted = false
+    @State private var showAlert = false
 
     var body: some View {
         VStack(spacing: 20) {
-            Text(statusText)
+            Text(testCompleted ? "Test completed!" : "Shake the phone to test")
                 .font(.title2)
-            Image(systemName: detector.shakeDetected ? "hand.raised.fill" : "hand.raised")
+
+            Image(systemName: viewModel.shakeDetected ? "hand.raised.fill" : "hand.raised")
                 .font(.system(size: 60))
-                .foregroundColor(detector.shakeDetected ? .green : .gray)
+                .foregroundColor(viewModel.shakeDetected ? .green : .gray)
+
+            if testCompleted {
+                DefaultButton(title: "Finish Test") {
+                    shakeService.saveResult(passed: true, to: testOverviewVM)
+                    if let fullVM = fullScreenVM {
+                        fullVM.goToNextStep()
+                    } else {
+                        navModel.path.removeLast()
+                    }
+                }
+            } else {
+                SecondaryButton(title: "Fail Test") {
+                    shakeService.saveResult(passed: false, to: testOverviewVM)
+                    navModel.path.removeLast()
+                }
+            }
         }
         .padding()
-        .onReceive(detector.$shakeDetected) { didShake in
+        .onReceive(viewModel.$shakeDetected) { didShake in
             if didShake {
-                statusText = "Shake registreret! "
-                // evt. navigere videre:
-                // navModel.navigate(to: .threeD)
+                testCompleted = true
             }
         }
     }

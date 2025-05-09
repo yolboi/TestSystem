@@ -7,12 +7,17 @@
 
 import SwiftUI
 
-/// SwiftUI View til at guide True Tone-testen
-struct TrueToneCheckView: View {
-    @StateObject private var viewModel = TrueToneCheckViewModel()
-    /// Callback når brugeren vil fortsætte
-  //  let onContinue: () -> Void
+struct TrueToneView: View {
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    @EnvironmentObject var navModel: NavigationModel
     var onComplete: () -> Void = {}
+
+    @StateObject private var viewModel: TrueToneViewModel
+
+    init(onComplete: @escaping () -> Void = {}) {
+        self.onComplete = onComplete
+        _viewModel = StateObject(wrappedValue: TrueToneViewModel(testOverviewVM: TestOverviewViewModel()))
+    }
 
     var body: some View {
         VStack(spacing: 24) {
@@ -26,7 +31,7 @@ struct TrueToneCheckView: View {
                     .fill(Color.gray.opacity(0.1))
                     .frame(height: 200)
                     .cornerRadius(12)
-                Image(systemName: "arrow.down.right")
+                Image(systemName: "arrow.up")
                     .font(.system(size: 40))
                     .padding()
             }
@@ -41,7 +46,6 @@ struct TrueToneCheckView: View {
 
             Button(action: {
                 viewModel.didConfirm()
-               // onContinue()
                 onComplete()
             }) {
                 Text("Fortsæt")
@@ -58,16 +62,5 @@ struct TrueToneCheckView: View {
         }
         .navigationTitle("True Tone Test")
         .padding()
-    }
-}
-
-// Preview
-struct TrueToneCheckView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            TrueToneCheckView {
-                // Continue action in preview
-            }
-        }
     }
 }

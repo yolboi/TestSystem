@@ -41,7 +41,7 @@ struct ContentView: View {
                                 case .shake:
                                     ShakeTestView()
                                 case .trueTone:
-                                    TrueToneCheckView { navModel.navigate(to: .technicianTest) }
+                                    TrueToneView ()
                                 case .battery:
                                     BatteryTestView(testOverviewVM: testOverviewVM)
                                 case .location:

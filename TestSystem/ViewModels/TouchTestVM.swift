@@ -39,15 +39,4 @@ class TouchTestViewModel: ObservableObject {
         }
         return true
     }
-
-    func saveResult(using testOverviewVM: TestOverviewViewModel) {
-        let result = TestResult(
-            testType: .screen,
-            passed: isTestCompleted(),
-            timestamp: Date(),
-            notes: isTestCompleted() ? nil : "Not all fields were completed",
-            confirmed: true
-        )
-        testOverviewVM.addResult(result)
-    }
 }
