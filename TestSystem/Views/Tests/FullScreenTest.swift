@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct FullScreenTestView: View {
-    @StateObject private var vm = FullScreenTestViewModel()
+    @StateObject var vm = FullScreenTestViewModel()
     
     var body: some View {
         VStack {
             switch vm.currentStep {
             case .touch:
-                TouchTest(onComplete: vm.goToNextStep)
+                TouchTest(fullScreenVM: vm)
 
             case .pixel:
                 PixelTestView(onComplete: vm.goToNextStep)

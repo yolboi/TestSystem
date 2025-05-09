@@ -10,11 +10,13 @@ import SwiftUI
 struct ScreenOne: View {
     @EnvironmentObject var navModel: NavigationModel
     @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    
+    @State private var refreshID = UUID()
 
     let fullTests: [FullTests] = [
         FullTests(title: "full screen", icon: "iphone", testType: .fullScreen)
     ]
-    
+
     let menuItems: [TestMenuItem] = [
         TestMenuItem(title: "Touch", icon: "hand.point.up.braille.fill", testType: .screen),
         TestMenuItem(title: "Haptic Touch", icon: "dot.circle.and.hand.point.up.left.fill", testType: .threeD),
@@ -32,20 +34,13 @@ struct ScreenOne: View {
         GridItem(.flexible())
     ]
 
-    //måske ryk den her et andet sted hen
-    @MainActor
-    func testStatusIcon(for type: TestType) -> Image? {
-        guard let result = testOverviewVM.results.first(where: { $0.testType == type && $0.confirmed }) else {
-            return nil
-        }
-
-        return Image(systemName: result.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
-    }
-    
     var body: some View {
         ScrollView {
-            
             Text("Component Tests")
+                .font(.title2)
+                .bold()
+                .padding(.top)
+
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(fullTests, id: \.self) { item in
                     Button {
@@ -53,10 +48,9 @@ struct ScreenOne: View {
                     } label: {
                         ZStack(alignment: .topTrailing) {
                             PicButton(title: item.title, image: Image(systemName: item.icon))
-
-                            if let icon = testStatusIcon(for: item.testType) {
-                                icon
-                                    .foregroundColor(icon == Image(systemName: "checkmark.circle.fill") ? .green : .red)
+                            if let result = testOverviewVM.results.first(where: { $0.testType == item.testType && $0.confirmed }) {
+                                Image(systemName: result.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                    .foregroundColor(result.passed ? .green : .red)
                                     .offset(x: 10, y: -10)
                             }
                         }
@@ -64,13 +58,16 @@ struct ScreenOne: View {
                 }
             }
             .padding()
-            
-            Text("Single tests")
-                
+
+            Text("Single Tests")
+                .font(.title2)
+                .bold()
+                .padding(.top)
+
             Divider()
-                .frame(height: 1) // ændrer tykkelsen
+                .frame(height: 1)
                 .background(Color.gray)
-            
+
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(menuItems, id: \.self) { item in
                     Button {
@@ -78,10 +75,9 @@ struct ScreenOne: View {
                     } label: {
                         ZStack(alignment: .topTrailing) {
                             PicButton(title: item.title, image: Image(systemName: item.icon))
-
-                            if let icon = testStatusIcon(for: item.testType) {
-                                icon
-                                    .foregroundColor(icon == Image(systemName: "checkmark.circle.fill") ? .green : .red)
+                            if let result = testOverviewVM.results.first(where: { $0.testType == item.testType && $0.confirmed }) {
+                                Image(systemName: result.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                    .foregroundColor(result.passed ? .green : .red)
                                     .offset(x: 10, y: -10)
                             }
                         }
@@ -90,7 +86,14 @@ struct ScreenOne: View {
             }
             .padding()
         }
+        .id(refreshID)
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            testOverviewVM.loadResults()
+        }
+        .onReceive(testOverviewVM.$results) { _ in
+            refreshID = UUID()
+        }
     }
 }
 

@@ -12,14 +12,12 @@ struct StartScreen: View {
     @State private var userType: UserType = .technicianTest
     @State private var showTerms = false
 
+    var onContinue: (() -> Void)? = nil
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Welcome to TestSystem").font(.largeTitle).bold()
-            Text("")
-                .font(.headline)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-
+            
             Picker("I'm a:", selection: $userType) {
                 Text("Technician").tag(UserType.technicianTest)
                 Text("Costumer").tag(UserType.customerSell)
@@ -29,14 +27,13 @@ struct StartScreen: View {
 
             DefaultButton(title: "Continue") {
                 if userType == .customerSell {
-                    showTerms = true // 👉 vis TermsView
+                    showTerms = true
                 } else {
-                    navModel.navigate(to: userType) // 👉 direkte videre
+                    navModel.navigate(to: userType)
+                    onContinue?() // ← hvis du bruger intro-flowet
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding()
-            .cornerRadius(8)
             .padding(.horizontal)
         }
         .padding()
@@ -45,6 +42,7 @@ struct StartScreen: View {
                 .interactiveDismissDisabled(true)
                 .onDisappear {
                     navModel.navigate(to: userType)
+                    onContinue?() // ← også her!
                 }
         }
     }

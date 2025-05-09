@@ -9,7 +9,8 @@ import SwiftUI
 
 class FullScreenTestViewModel: ObservableObject {
     @Published var currentStepIndex = 0
-    
+    @Published var isInFullScreenTest: Bool = true
+
     var steps: [ScreenTestStep] {
         ScreenTestStep.allCases
     }

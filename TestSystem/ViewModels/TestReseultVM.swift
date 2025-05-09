@@ -18,18 +18,17 @@ class TestOverviewViewModel: ObservableObject {
     }
 
     func loadResults() {
-        results = storage.load()
+        DispatchQueue.main.async {
+            self.results = self.storage.load()
+        }
     }
 
     func addResult(_ result: TestResult) {
-        // Fjern eksisterende resultat med samme testType, hvis det findes
-        if let index = results.firstIndex(where: { $0.testType == result.testType }) {
-            results[index] = result
-        } else {
-            results.append(result)
-        }
+        // Filtrer det gamle resultat væk og tilføj det nye — skaber et helt nyt array
+        var updated = results.filter { $0.testType != result.testType }
+        updated.append(result)
+        results = updated // 💥 dette tvinger SwiftUI til at se det som ny værdi
         storage.save(results)
-        loadResults() // Sikrer at UI opdateres med nye værdier
     }
 
     func getResult(for type: TestType) -> TestResult? {
