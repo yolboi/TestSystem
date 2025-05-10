@@ -26,9 +26,9 @@ struct TermsView: View {
                     .background(
                         GeometryReader { proxy in
                             Color.clear
-                                .onChange(of: proxy.frame(in: .global).maxY) { value in // nødvendig siden at der nok ellers skal laves en ny sctruct
+                                .onChange(of: proxy.frame(in: .global).maxY) {
                                     let screenHeight = UIScreen.main.bounds.height
-                                    if value < screenHeight {
+                                    if proxy.frame(in: .global).maxY < screenHeight {
                                         hasScrolledToBottom = true
                                     }
                                 }

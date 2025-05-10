@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 class PixelTestViewModel: ObservableObject {
     enum TestColor: CaseIterable {
         case red, green, blue
@@ -23,12 +24,27 @@ class PixelTestViewModel: ObservableObject {
     @Published var currentColorIndex: Int = 0
     @Published var markedErrors: [CGPoint] = []
     
+    private let testOverviewVM: TestOverviewViewModel
+    private let service = PixelTestService()
+    
+    init(testOverviewVM: TestOverviewViewModel) {
+        self.testOverviewVM = testOverviewVM
+    }
+    
     var currentColor: Color {
         TestColor.allCases[currentColorIndex].color
     }
     
+    var testPassed: Bool {
+        markedErrors.isEmpty
+    }
+    
     func nextColor() {
         currentColorIndex = (currentColorIndex + 1) % TestColor.allCases.count
+    }
+    
+    func previousColor() {
+        currentColorIndex = (currentColorIndex - 1 + TestColor.allCases.count) % TestColor.allCases.count
     }
     
     func addError(at location: CGPoint) {
@@ -40,7 +56,7 @@ class PixelTestViewModel: ObservableObject {
         markedErrors.removeAll()
     }
     
-    func previousColor() {
-        currentColorIndex = (currentColorIndex - 1 + TestColor.allCases.count) % TestColor.allCases.count
+    func finishTest() {
+        service.saveResult(passed: testPassed, to: testOverviewVM)
     }
 }

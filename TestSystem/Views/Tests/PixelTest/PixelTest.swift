@@ -8,33 +8,61 @@
 import SwiftUI
 
 struct PixelTestView: View {
-    var onComplete: () -> Void = {}
+    @EnvironmentObject var navModel: NavigationModel
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
     
     @State private var started = false
-    @StateObject private var vm = PixelTestViewModel()
+    @StateObject private var vm: PixelTestViewModel
+
+    init(testOverviewVM: TestOverviewViewModel) {
+        _vm = StateObject(wrappedValue: PixelTestViewModel(testOverviewVM: testOverviewVM))
+    }
 
     var body: some View {
-        if started {
-            PixelTestScreen(viewModel: vm)
-            
-            DefaultButton(title: "Done") {
-                onComplete()
-            }
-        } else {
-            VStack {
-                Text("How to use")
-                    .font(.largeTitle)
+        VStack {
+            if started {
+                PixelTestScreen(viewModel: vm)
+                
+                VStack(spacing: 12) {
+                    if vm.testPassed {
+                        Text("No pixel errors detected.")
+                            .foregroundColor(.green)
+                            .font(.headline)
+                    } else {
+                        Text("Pixel errors detected.")
+                            .foregroundColor(.red)
+                            .font(.headline)
+                    }
+                    
+                    DefaultButton(title: "Done") {
+                        vm.finishTest()
+                        navModel.path.removeLast()
+                    }
                     .padding(.top)
-                
-                Text("Swipe with two fingers to iterate through the colors, mark pixel error with one finger.")
-                    .padding()
-                
-                Spacer()
-                
-                DefaultButton(title: "Start") {
-                    started = true
                 }
+                .padding()
+            } else {
+                VStack(spacing: 20) {
+                    Text("Pixel Test")
+                        .font(.largeTitle)
+                        .bold()
+                    
+                    Text("Swipe with two fingers to iterate through different colors.\nMark pixel errors by tapping on the screen with one finger.\n\nMake sure there are no stuck or dead pixels.")
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .padding()
+
+                    Spacer()
+
+                    DefaultButton(title: "Start Test") {
+                        started = true
+                    }
+                    .padding()
+                }
+                .padding()
             }
         }
+        .navigationTitle("Pixel Test")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
