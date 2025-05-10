@@ -7,45 +7,57 @@
 
 import Foundation
 import SwiftUI
+import AVFoundation
 
 class CameraTestViewModel: ObservableObject {
-    enum CameraLens: String, CaseIterable {
-        case ultraWide = "Ultra Wide"
-        case wide = "Wide"
-        case telephoto = "Telephoto"
-    }
-
     @Published var capturedImages: [CameraLens: UIImage] = [:]
-    let lensOrder: [CameraLens] = [.ultraWide, .wide, .telephoto]
     @Published var currentLensIndex: Int = 0
+    @Published var capturedImage: UIImage?
 
+    let service = CameraService()
     private var testOverviewVM: TestOverviewViewModel
-    private let cameraService = CameraService()
-
-    var testCompleted: Bool {
-        capturedImages.count == lensOrder.count
-    }
+    let lensesToTest: [CameraLens]
 
     init(testOverviewVM: TestOverviewViewModel) {
         self.testOverviewVM = testOverviewVM
+        self.lensesToTest = CameraDeviceService.availableLenses()
     }
 
-    func capture(image: UIImage) {
-        guard currentLensIndex < lensOrder.count else { return }
-        let currentLens = lensOrder[currentLensIndex]
-        capturedImages[currentLens] = image
+    var nextLensToCapture: CameraLens? {
+        guard currentLensIndex < lensesToTest.count else { return nil }
+        return lensesToTest[currentLensIndex]
+    }
+
+    var testCompleted: Bool {
+        capturedImages.count == lensesToTest.count
+    }
+
+    var capturedImagesArray: [CapturedImage] {
+        capturedImages.map { CapturedImage(image: $0.value, lens: $0.key) }
+    }
+    
+    func startSession() {
+        guard let lens = nextLensToCapture else { return }
+        service.configureSession(for: lens.capturePosition)
+        service.startSession()
+    }
+
+    func stopSession() {
+        service.stopSession()
+    }
+
+    func capturePhoto() {
+        service.capturePhoto()
+    }
+
+    func saveCapturedImage() {
+        guard let lens = nextLensToCapture, let image = service.capturedImage else { return }
+        capturedImages[lens] = image
         currentLensIndex += 1
     }
 
     func finishTest() {
-        cameraService.saveResult(capturedImages: capturedImages.values.map { $0 }, expectedCount: lensOrder.count, to: testOverviewVM)
-    }
-
-    var nextLensToCapture: CameraLens? {
-        if currentLensIndex < lensOrder.count {
-            return lensOrder[currentLensIndex]
-        } else {
-            return nil
-        }
+        let allImages = capturedImages.map { $0.value }
+        service.saveResult(capturedImages: allImages, expectedCount: lensesToTest.count, to: testOverviewVM)
     }
 }

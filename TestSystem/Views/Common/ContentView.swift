@@ -45,7 +45,7 @@ struct ContentView: View {
                                 case .battery:
                                     BatteryTestView(testOverviewVM: testOverviewVM)
                                 case .location:
-                                    MapScreen()
+                                    LocationTest(locationService: LocationService(), testOverviewVM: testOverviewVM)
                                 case .ear:
                                     EarpieceView()
                                 case .pixel:

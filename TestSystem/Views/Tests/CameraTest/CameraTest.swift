@@ -9,10 +9,8 @@ import SwiftUI
 
 struct CameraTestView: View {
     @EnvironmentObject var navModel: NavigationModel
-
     @StateObject private var vm: CameraTestViewModel
     @State private var showCamera = false
-    @State private var showAlert = false
 
     init(testOverviewVM: TestOverviewViewModel) {
         _vm = StateObject(wrappedValue: CameraTestViewModel(testOverviewVM: testOverviewVM))
@@ -20,15 +18,28 @@ struct CameraTestView: View {
 
     var body: some View {
         VStack(spacing: 20) {
+            // Forklaringstekst
+            Text("Camera Lens Test")
+                .font(.title)
+                .bold()
+
+            Text("Take one picture with each available lens. You must take photos with UltraWide, Wide, and Telephoto cameras (if available).")
+                .font(.body)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            Divider()
+
+            // Kamera progress
             if let nextLens = vm.nextLensToCapture {
-                Text("Take a picture with the \(nextLens.rawValue) lens")
+                Text("Next: Capture a photo with the \(nextLens.rawValue) lens")
                     .font(.headline)
 
                 SecondaryButton(title: "Take Picture") {
                     showCamera = true
                 }
             } else {
-                Text("All lenses are tested")
+                Text("All lenses have been tested!")
                     .font(.headline)
                     .foregroundColor(.green)
 
@@ -38,35 +49,38 @@ struct CameraTestView: View {
                 }
             }
 
+            Divider()
+
+            // Billeder eller placeholdere
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                ForEach(vm.capturedImages.values.map { $0 }, id: \.self) { image in
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 150)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                ForEach(vm.capturedImagesArray) { capturedImage in
+                    VStack {
+                        Image(uiImage: capturedImage.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 150)
+                            .cornerRadius(10)
+
+                        Text(capturedImage.lens.rawValue)
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
                 }
             }
+
+            Spacer()
         }
         .padding()
         .sheet(isPresented: $showCamera) {
-            CameraCaptureView { image in
-                if let img = image {
-                    vm.capture(image: img)
-                } else {
-                    // Hvis brugeren lukker kamera uden at tage billede
-                    showAlert = true
+            if let nextLens = vm.nextLensToCapture {
+                CameraCaptureView(desiredLens: nextLens) { image in
+                    if let img = image {
+                        vm.service.capturedImage = img
+                        vm.saveCapturedImage()
+                    }
+                    showCamera = false
                 }
-                showCamera = false
             }
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("No photo captured"),
-                message: Text("Please take a picture to continue the test."),
-                dismissButton: .default(Text("OK"))
-            )
         }
     }
 }
