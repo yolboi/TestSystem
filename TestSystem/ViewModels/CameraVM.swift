@@ -10,16 +10,17 @@ import SwiftUI
 
 class CameraTestViewModel: ObservableObject {
     enum CameraLens: String, CaseIterable {
-        case wide = "Vidvinkel"
-        case ultraWide = "Ultravidvinkel"
-        case telephoto = "Telefoto"
+        case ultraWide = "Ultra Wide"
+        case wide = "Wide"
+        case telephoto = "Telephoto"
     }
 
-    @Published var capturedImages: [UIImage] = []
-    let lensOrder: [CameraLens] = CameraLens.allCases
+    @Published var capturedImages: [CameraLens: UIImage] = [:]
+    let lensOrder: [CameraLens] = [.ultraWide, .wide, .telephoto]
     @Published var currentLensIndex: Int = 0
 
     private var testOverviewVM: TestOverviewViewModel
+    private let cameraService = CameraService()
 
     var testCompleted: Bool {
         capturedImages.count == lensOrder.count
@@ -30,19 +31,21 @@ class CameraTestViewModel: ObservableObject {
     }
 
     func capture(image: UIImage) {
-        guard capturedImages.count < lensOrder.count else { return }
-        capturedImages.append(image)
+        guard currentLensIndex < lensOrder.count else { return }
+        let currentLens = lensOrder[currentLensIndex]
+        capturedImages[currentLens] = image
         currentLensIndex += 1
     }
 
     func finishTest() {
-        let result = TestResult(
-            testType: .camera,
-            passed: testCompleted,
-            timestamp: Date(),
-            notes: testCompleted ? nil : "Ikke alle billeder blev taget",
-            confirmed: true
-        )
-        testOverviewVM.addResult(result)
+        cameraService.saveResult(capturedImages: capturedImages.values.map { $0 }, expectedCount: lensOrder.count, to: testOverviewVM)
+    }
+
+    var nextLensToCapture: CameraLens? {
+        if currentLensIndex < lensOrder.count {
+            return lensOrder[currentLensIndex]
+        } else {
+            return nil
+        }
     }
 }

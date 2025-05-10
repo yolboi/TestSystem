@@ -6,12 +6,21 @@
 //
 
 import UIKit
-import AVFoundation
 
-class CameraService: NSObject, ObservableObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    @Published var image: UIImage?
-    
-    func takePhoto(from sourceType: UIImagePickerController.SourceType, completion: @escaping (UIImage?) -> Void) {
-        // Du opretter en ImagePickerViewController og håndterer resultatet her
+class CameraService {
+    func isTestPassed(capturedImages: [UIImage], expectedCount: Int) -> Bool {
+        return capturedImages.count >= expectedCount
+    }
+
+    func saveResult(capturedImages: [UIImage], expectedCount: Int, to viewModel: TestOverviewViewModel) {
+        let passed = isTestPassed(capturedImages: capturedImages, expectedCount: expectedCount)
+        let result = TestResult(
+            testType: .camera,
+            passed: passed,
+            timestamp: Date(),
+            notes: passed ? nil : "Not all camera lenses were tested",
+            confirmed: true
+        )
+        viewModel.addResult(result)
     }
 }

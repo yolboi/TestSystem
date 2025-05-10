@@ -8,20 +8,23 @@
 import SwiftUI
 
 struct CameraTestView: View {
+    @EnvironmentObject var navModel: NavigationModel
+
     @StateObject private var vm: CameraTestViewModel
     @State private var showCamera = false
-    
+    @State private var showAlert = false
+
     init(testOverviewVM: TestOverviewViewModel) {
         _vm = StateObject(wrappedValue: CameraTestViewModel(testOverviewVM: testOverviewVM))
     }
 
-    
     var body: some View {
         VStack(spacing: 20) {
-            if !vm.testCompleted {
-                Text("Take a picture with: \(vm.lensOrder[vm.currentLensIndex].rawValue)-lens")
+            if let nextLens = vm.nextLensToCapture {
+                Text("Take a picture with the \(nextLens.rawValue) lens")
+                    .font(.headline)
 
-                SecondaryButton(title: "Take picture") {
+                SecondaryButton(title: "Take Picture") {
                     showCamera = true
                 }
             } else {
@@ -29,14 +32,14 @@ struct CameraTestView: View {
                     .font(.headline)
                     .foregroundColor(.green)
 
-                SecondaryButton(title: "End Test") {
+                DefaultButton(title: "Finish Test") {
                     vm.finishTest()
+                    navModel.path.removeLast()
                 }
             }
-            
-            
+
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                ForEach(vm.capturedImages, id: \.self) { image in
+                ForEach(vm.capturedImages.values.map { $0 }, id: \.self) { image in
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
@@ -45,24 +48,25 @@ struct CameraTestView: View {
                         .padding(.horizontal)
                 }
             }
-            
-            if vm.testCompleted {
-                Text("All pictures is captured")
-                    .foregroundColor(.green)
-                    .font(.title3)
-
-                DefaultButton(title: "End test") {
-                    vm.finishTest()
-                }
-            }
         }
+        .padding()
         .sheet(isPresented: $showCamera) {
             CameraCaptureView { image in
                 if let img = image {
                     vm.capture(image: img)
+                } else {
+                    // Hvis brugeren lukker kamera uden at tage billede
+                    showAlert = true
                 }
                 showCamera = false
             }
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("No photo captured"),
+                message: Text("Please take a picture to continue the test."),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 }
