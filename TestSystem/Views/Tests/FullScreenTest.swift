@@ -20,9 +20,11 @@ struct FullScreenTestView: View {
                 TouchTest(fullScreenVM: vm)
 
             case .pixel:
-                PixelTestView(testOverviewVM: testOverviewVM)
-                    .environmentObject(testOverviewVM)
-                    .environmentObject(navModel)
+                PixelTestView(testOverviewVM: testOverviewVM, onComplete: {
+                    vm.goToNextStep()
+                })
+                .environmentObject(testOverviewVM)
+                .environmentObject(navModel)
 
             case .threeD:
                 ThreeDtouchTestView(onComplete: vm.goToNextStep)

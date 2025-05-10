@@ -24,7 +24,7 @@ struct TestCompletionView: View {
                 .font(.title3)
 
             DefaultButton(title: buttonText) {
-                navModel.path = NavigationPath()
+                navModel.path.removeLast()
             }
         }
         .padding()

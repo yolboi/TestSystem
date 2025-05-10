@@ -14,12 +14,12 @@ struct ScreenOne: View {
     @State private var refreshID = UUID()
 
     let fullTests: [FullTests] = [
-        FullTests(title: "full screen", icon: "iphone", testType: .fullScreen)
+        FullTests(title: "Full screen", icon: "iphone", testType: .fullScreen)
     ]
 
     let menuItems: [TestMenuItem] = [
         TestMenuItem(title: "Touch", icon: "hand.point.up.braille.fill", testType: .screen),
-        TestMenuItem(title: "Haptic Touch", icon: "dot.circle.and.hand.point.up.left.fill", testType: .threeD),
+        TestMenuItem(title: "Haptic", icon: "dot.circle.and.hand.point.up.left.fill", testType: .threeD),
         TestMenuItem(title: "Shake", icon: "hands.and.sparkles.fill", testType: .shake),
         TestMenuItem(title: "Battery", icon: "battery.50", testType: .battery),
         TestMenuItem(title: "True Tone", icon: "circle.tophalf.filled", testType: .trueTone),

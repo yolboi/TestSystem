@@ -21,7 +21,7 @@ struct TrueToneView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Text("Høj sandsynlighed for, at skærmen har True Tone")
+            Text("High probability that the screen has True Tone")
                 .font(.title3)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
@@ -37,18 +37,18 @@ struct TrueToneView: View {
             }
             .padding(.horizontal)
 
-            Text("Swipe ned fra øverste højre hjørne for at åbne Kontrolcenter og bekræft True Tone.")
+            Text("Swipe down from the top right corner to open Control Center and confirm True Tone")
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
-            Toggle("Jeg har bekræftet True Tone i Kontrolcenter", isOn: $viewModel.confirmed)
+            Toggle("I have confirmed True Tone in Control Center", isOn: $viewModel.confirmed)
                 .padding(.horizontal)
 
             Button(action: {
                 viewModel.didConfirm()
                 onComplete()
             }) {
-                Text("Fortsæt")
+                Text("Continue")
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(viewModel.confirmed ? Color.blue : Color.gray)

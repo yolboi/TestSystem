@@ -32,7 +32,7 @@ struct ThreeDtouchTestView: View {
             if testPassed == false {
                 FailedTest(showFailed: true)
             } else if testPassed == true {
-                Text("✅ Passed")
+                Text("Passed")
                     .foregroundColor(.green)
             }
         }

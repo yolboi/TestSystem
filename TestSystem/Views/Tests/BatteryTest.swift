@@ -31,16 +31,16 @@ struct BatteryTestView: View {
             Divider()
 
             if viewModel.testPassed {
-                Text("Test bestået")
+                Text("Test passed")
                     .foregroundColor(.green)
             } else {
-                Text("Sæt venligst opladning til")
+                Text("Please connect to a charger")
                     .foregroundColor(.red)
             }
 
             Spacer()
 
-            Button("Opdater status") {
+            Button("Update status") {
                 viewModel.updateBatteryStatus()
             }
             .padding()
@@ -50,7 +50,7 @@ struct BatteryTestView: View {
 
             Spacer()
             
-            SecondaryButton(title: "Afslut test") {
+            SecondaryButton(title: "Finish test") {
                 viewModel.finishTest()
                 dismiss()
             }

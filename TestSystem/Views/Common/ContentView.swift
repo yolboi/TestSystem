@@ -49,7 +49,7 @@ struct ContentView: View {
                                 case .ear:
                                     EarpieceView()
                                 case .pixel:
-                                    PixelTestView(testOverviewVM: testOverviewVM)
+                                    PixelTestView(testOverviewVM: testOverviewVM, onComplete: {})
                                 case .fullScreen:
                                     FullScreenTestView()
                                 case .camera:
