@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-//den generelle knap
+//The main button MUST have an action
 struct DefaultButton: View {
     let title: String
     let action: () -> Void
@@ -37,6 +37,7 @@ struct DefaultButton: View {
     }
 }
 
+// the seconday button MUST have an action
 struct SecondaryButton: View {
     let title: String
     let action: () -> Void
@@ -44,13 +45,14 @@ struct SecondaryButton: View {
     var body: some View {
         Button(action: action){
             Text(title)
-                .foregroundColor(Theme.button.accentColor)
+                .foregroundColor(Color.black)
                 .overlay(Theme.button.buttonGradient)
                 .mask(Text(title))
         }
     }
 }
 
+// picture button, used in ScreenOne for tests 
 struct PicButton: View {
     let title: String
     let image: Image
@@ -66,14 +68,14 @@ struct PicButton: View {
                 Divider()
 
                 Text(title)
-                    .foregroundColor(Theme.button.accentColor)
+                    .foregroundColor(Color.black)
                     .overlay(Theme.button.buttonGradient)
                     .mask(Text(title))
             }
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Theme.button.accentColor, lineWidth: 0.5)
+                    .stroke(Color.black, lineWidth: 0.5)
             )
         .buttonStyle(PlainButtonStyle()) // så den ikke får blå highlight
         .frame(width: 120, height: 120) // ← kompakt størrelse du kan ændre!
@@ -81,5 +83,5 @@ struct PicButton: View {
 }
 
 #Preview {
-    PicButton(title: "hej", image: Image(systemName: "swift"))
+    SecondaryButton(title: "hej", action: {})
 }

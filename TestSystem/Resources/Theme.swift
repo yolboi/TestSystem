@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// some usefull colors, taken from apple course 
 enum Theme: String {
     case bubblegum
     case buttercup
@@ -27,55 +28,46 @@ enum Theme: String {
     case yellow
     case button
     
-    var accentColor: Color {
-        switch self {
-        case .bubblegum, .buttercup, .lavender, .orange, .periwinkle, .poppy, .seafoam, .sky, .tan, .teal, .yellow, .button:
-            return .black
-        case .indigo, .magenta, .navy, .oxblood, .purple:
-            return .white
-        }
-    }
-    
     var mainColor: Color {
         switch self {
         case .bubblegum:
-            return Color(red: 1.0, green: 0.71, blue: 0.77) // F.eks. en bubblegum-rosa nuance
+            return Color(red: 1.0, green: 0.71, blue: 0.77)
         case .buttercup:
-            return Color(red: 1.0, green: 0.96, blue: 0.67) // Buttercup gul
+            return Color(red: 1.0, green: 0.96, blue: 0.67)
         case .indigo:
-            return Color(red: 0.29, green: 0.0, blue: 0.51)  // Indigo
+            return Color(red: 0.29, green: 0.0, blue: 0.51)
         case .lavender:
-            return Color(red: 0.90, green: 0.90, blue: 0.98)  // Lavender
+            return Color(red: 0.90, green: 0.90, blue: 0.98)
         case .magenta:
-            return Color(red: 1.0, green: 0.0, blue: 1.0)       // Magenta
+            return Color(red: 1.0, green: 0.0, blue: 1.0)
         case .navy:
-            return Color(red: 0.0, green: 0.0, blue: 0.5)       // Navy blå
+            return Color(red: 0.0, green: 0.0, blue: 0.5)
         case .orange:
-            return Color(red: 1.0, green: 0.65, blue: 0.0)      // Orange
+            return Color(red: 1.0, green: 0.65, blue: 0.0)
         case .oxblood:
-            return Color(red: 0.27, green: 0.0, blue: 0.0)      // Oxblood (mørk rød)
+            return Color(red: 0.27, green: 0.0, blue: 0.0)
         case .periwinkle:
-            return Color(red: 0.8, green: 0.8, blue: 1.0)        // Periwinkle (lyslilla/blå)
+            return Color(red: 0.8, green: 0.8, blue: 1.0)
         case .poppy:
-            return Color(red: 0.89, green: 0.21, blue: 0.21)     // Poppy rød
+            return Color(red: 0.89, green: 0.21, blue: 0.21)
         case .purple:
-            return Color(red: 0.5, green: 0.0, blue: 0.5)        // Klassisk lilla
+            return Color(red: 0.5, green: 0.0, blue: 0.5)
         case .seafoam:
-            return Color(red: 0.62, green: 0.91, blue: 0.75)     // Seafoam grøn/blå
+            return Color(red: 0.62, green: 0.91, blue: 0.75)
         case .sky:
-            return Color(red: 0.53, green: 0.81, blue: 0.92)     // Sky blå
+            return Color(red: 0.53, green: 0.81, blue: 0.92)
         case .tan:
-            return Color(red: 0.82, green: 0.71, blue: 0.55)     // Tan
+            return Color(red: 0.82, green: 0.71, blue: 0.55)
         case .teal:
-            return Color(red: 0.0, green: 0.5, blue: 0.5)        // Teal
+            return Color(red: 0.0, green: 0.5, blue: 0.5)
         case .yellow:
-            return Color(red: 1.0, green: 1.0, blue: 0.0)        // Gul
+            return Color(red: 1.0, green: 1.0, blue: 0.0)
         case .button:
             return Color.blue
         }
     }
                 
-    // Ny property, som returnerer en gradient for knapper
+    // The gradient color that the modded buttons use
     var buttonGradient: LinearGradient {
         switch self {
         case .button:
@@ -85,7 +77,6 @@ enum Theme: String {
                 endPoint: .bottomTrailing
             )
         default:
-            // For andre temaer kan du lave en gradient baseret på mainColor eller en enkelt farve
             return LinearGradient(
                 gradient: Gradient(colors: [self.mainColor]),
                 startPoint: .top,
