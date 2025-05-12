@@ -10,6 +10,7 @@ import XCTest
 
 final class TestSystemTests: XCTestCase {
     
+    // Test that marking a field as touched updates the state correctly
     func testMarkTouchedUpdatesState() {
         let viewModel = TouchTestViewModel()
         
@@ -18,12 +19,14 @@ final class TestSystemTests: XCTestCase {
         XCTAssertTrue(viewModel.touched[0][0], "Field at (0,0) should be marked as touched")
     }
     
+    // Test that a newly created view model is not completed
     func testIsTestCompletedInitiallyFalse() {
         let viewModel = TouchTestViewModel()
         
         XCTAssertFalse(viewModel.isTestCompleted(), "Test should not be completed initially")
     }
     
+    // Test that touching all fields marks the test as completed
     func testIsTestCompletedAfterTouchingAllFields() {
         let viewModel = TouchTestViewModel()
         
@@ -36,6 +39,7 @@ final class TestSystemTests: XCTestCase {
         XCTAssertTrue(viewModel.isTestCompleted(), "Test should be completed when all fields are touched")
     }
     
+    // Test that resetGrid sets all fields back to false
     func testResetGridSetsAllFieldsToFalse() {
         let viewModel = TouchTestViewModel()
         

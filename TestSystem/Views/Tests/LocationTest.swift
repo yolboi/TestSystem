@@ -4,17 +4,20 @@
 //
 //  Created by Jarl Boyd Roest on 23/04/2025.
 //
+//  Provides a location test by allowing users to search for a destination, view their route, and verify GPS accuracy.
+//
 
 
 import SwiftUI
 import MapKit
 
 struct LocationTest: View {
+
     @EnvironmentObject var navModel: NavigationModel
     @StateObject private var vm: LocationTestViewModel
-    @State private var locationManager = CLLocationManager()
+    @State private var locationManager = CLLocationManager() /// Core Location manager
     @State private var cameraPosition: MapCameraPosition = .automatic
-    @State private var searchDebounceTask: DispatchWorkItem?
+    @State private var searchDebounceTask: DispatchWorkItem?  /// Used to debounce search input
 
     init(locationService: LocationService, testOverviewVM: TestOverviewViewModel) {
         _vm = StateObject(wrappedValue: LocationTestViewModel(locationService: locationService, testOverviewVM: testOverviewVM))
@@ -22,14 +25,17 @@ struct LocationTest: View {
 
     var body: some View {
         VStack {
+            /// Search field for destination
             TextField("Enter address", text: $vm.searchText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
                 .onChange(of: vm.searchText) {
-                    searchDebounceTask?.cancel() // Stop gammel søgning hvis man skriver hurtigt
+                    /// Cancel previous debounce task if typing continues
+                    searchDebounceTask?.cancel()
 
                     guard !vm.searchText.isEmpty else { return }
 
+                    /// Create a new debounce task
                     let task = DispatchWorkItem {
                         vm.search()
                     }
@@ -37,7 +43,7 @@ struct LocationTest: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: task)
                 }
 
-            // Søgeresultater
+            /// Search results list
             List(vm.searchResults, id: \.self) { item in
                 Button(action: {
                     vm.selectDestination(destinationItem: item)
@@ -58,7 +64,7 @@ struct LocationTest: View {
             .listStyle(PlainListStyle())
             .frame(maxHeight: 200)
 
-            // Kort
+            /// Map view showing user location, destination, and route
             Map(position: $cameraPosition) {
                 UserAnnotation()
 
@@ -75,7 +81,7 @@ struct LocationTest: View {
 
             Spacer()
 
-            // Afslutningsknapper
+            /// Action buttons depending on test result
             if vm.testCompleted {
                 DefaultButton(title: "Test Passed – Go Back") {
                     navModel.path.removeLast()
@@ -89,6 +95,7 @@ struct LocationTest: View {
             }
         }
         .onAppear {
+            /// Request location authorization and set initial map region
             locationManager.requestWhenInUseAuthorization()
             if let location = locationManager.location?.coordinate {
                 cameraPosition = .region(MKCoordinateRegion(center: location, latitudinalMeters: 1000, longitudinalMeters: 1000))
@@ -97,7 +104,7 @@ struct LocationTest: View {
     }
 }
 
-// Skjul tastaturet
+/// Extension to hide the keyboard
 extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)

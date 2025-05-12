@@ -4,19 +4,23 @@
 //
 //  Created by Jarl Boyd Roest on 20/02/2025.
 //
+// View displaying device information and a log of all completed tests
+//
 
 import SwiftUI
 
 struct ScreenTwo: View {
-    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel /// Provides access to the list of test results
 
-    let name = UIDevice.current.name
-    let systemName = UIDevice.current.systemName
-    let systemVersion = UIDevice.current.systemVersion
-
+    let name = UIDevice.current.name  /// Device name (e.g., "John's iPhone")
+    let systemName = UIDevice.current.systemName /// Operating system name (e.g., "iOS")
+    let systemVersion = UIDevice.current.systemVersion /// Operating system version (e.g., "17.4")
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                
+                /// About Device Section
                 Text("About Device")
                     .font(.title)
                     .bold()
@@ -29,6 +33,7 @@ struct ScreenTwo: View {
 
                 Divider()
 
+                /// Test Log Section
                 Text("Test Log")
                     .font(.title2)
                     .bold()
@@ -61,6 +66,7 @@ struct ScreenTwo: View {
                     Divider()
                 }
 
+                /// Reset All Tests Button
                 Button(role: .destructive) {
                     testOverviewVM.clearAll()
                 } label: {
@@ -80,7 +86,6 @@ struct ScreenTwo: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
 #Preview {
     ScreenTwo()
         .environmentObject(TestOverviewViewModel())

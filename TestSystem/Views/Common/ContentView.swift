@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
-    @EnvironmentObject var navModel: NavigationModel
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel /// Provides access to the shared test overview state
+    @EnvironmentObject var navModel: NavigationModel /// Provides access to the shared navigation model
     
-    @StateObject var fullScreenVM = FullScreenTestViewModel()
-    @State private var showTabBar = false // ← Ny state
+    @StateObject var fullScreenVM = FullScreenTestViewModel() /// Manages full screen test logic locally
+    @State private var showTabBar = false /// Controls whether to show the TabView or the start screen
 
     var body: some View {
         Group {
             if showTabBar {
                 TabView {
-                    // Home Tab
+                    /// Home Tab
                     NavigationStack(path: $navModel.path) {
                         StartScreen()
                             .navigationDestination(for: UserType.self) { user in
@@ -41,7 +41,7 @@ struct ContentView: View {
                                 case .shake:
                                     ShakeTestView()
                                 case .trueTone:
-                                    TrueToneView ()
+                                    TrueToneView()
                                 case .battery:
                                     BatteryTestView(testOverviewVM: testOverviewVM)
                                 case .location:
@@ -59,25 +59,25 @@ struct ContentView: View {
                     }
                     .tabItem { Label("Home", systemImage: "house.fill") }
 
-                    // Test Log
+                    /// Test Log Tab
                     NavigationStack {
                         ScreenTwo()
                     }
                     .tabItem { Label("Test Log", systemImage: "pencil") }
 
-                    // Summary
+                    /// Summary Tab
                     NavigationStack {
                         TestSummaryView()
                     }
                     .tabItem { Label("Summary", systemImage: "list.bullet") }
                 }
-                .toolbarBackground(Color.blue, for: .tabBar)
+                .toolbarBackground(Color.blue, for: .tabBar) /// Set tab bar background color
                 .toolbarBackground(.visible, for: .tabBar)
-                .accentColor(.blue)
+                .accentColor(.blue) /// Set tab selection color
             } else {
-                // Initial view — fx en intro, login eller full screen test
+                /// Initial view — for example, intro, login, or full screen test
                 StartScreen(onContinue: {
-                    showTabBar = true // ← Kaldes fx når brugeren er klar
+                    showTabBar = true  /// Triggered when user is ready to enter the main app
                 })
             }
         }

@@ -4,20 +4,24 @@
 //
 //  Created by Jarl Boyd Roest on 04/03/2025.
 //
+// View for testing the touch screen by having users touch all grid squares
+//
 
 import SwiftUI
 
 struct TouchTest: View {
+
     @EnvironmentObject var testOverviewVM: TestOverviewViewModel
     @EnvironmentObject var navModel: NavigationModel
 
     var fullScreenVM: FullScreenTestViewModel? = nil
-    @StateObject private var viewModel = TouchTestViewModel()
 
+    @StateObject private var viewModel = TouchTestViewModel()
     @State private var showFailAlert: Bool = false
 
     var body: some View {
         VStack {
+            /// Touch grid layout
             GeometryReader { geometry in
                 let squareWidth = geometry.size.width / CGFloat(viewModel.columns)
                 let squareHeight = geometry.size.height / CGFloat(viewModel.rows)
@@ -39,6 +43,7 @@ struct TouchTest: View {
                         }
                     }
                 }
+                /// Gesture handling: mark squares when touched
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
@@ -51,6 +56,7 @@ struct TouchTest: View {
                 )
             }
 
+            /// Finish Test button
             DefaultButton(title: "Finish Test") {
                 if viewModel.isTestCompleted() {
                     let result = TestResult(
@@ -72,6 +78,7 @@ struct TouchTest: View {
                 }
             }
 
+            /// Reset Test button
             SecondaryButton(title: "Reset Test") {
                 viewModel.resetGrid()
             }
@@ -79,6 +86,7 @@ struct TouchTest: View {
             Spacer()
         }
         .padding()
+        /// Failure alert if not all squares were touched
         .alert(isPresented: $showFailAlert) {
             Alert(
                 title: Text("Test Failed"),
@@ -104,7 +112,6 @@ struct TouchTest: View {
         }
     }
 }
-
 
 #Preview {
     TouchTest()

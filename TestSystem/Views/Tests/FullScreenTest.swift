@@ -4,6 +4,8 @@
 //
 //  Created by Jarl Boyd Roest on 30/04/2025.
 //
+// the FullScreen test flow 
+//
 
 import SwiftUI
 
@@ -15,6 +17,7 @@ struct FullScreenTestView: View {
     
     var body: some View {
         VStack {
+            /// Switch based on the current test step
             switch vm.currentStep {
             case .touch:
                 TouchTest(fullScreenVM: vm)
@@ -37,6 +40,7 @@ struct FullScreenTestView: View {
                     .environmentObject(navModel)
                 
             case .done:
+                /// Test completion screen after all tests are done
                 TestCompletionView(
                     title: "Full ScreenTest is done",
                     message: "You've completed the full screen test",

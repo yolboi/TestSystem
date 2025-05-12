@@ -4,14 +4,16 @@
 //
 //  Created by Jarl Boyd Roest on 18/02/2025.
 //
+// View showing available full tests and single component tests
+//
 
 import SwiftUI
 
 struct ScreenOne: View {
-    @EnvironmentObject var navModel: NavigationModel
-    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
+    @EnvironmentObject var navModel: NavigationModel /// Provides access to navigation stack
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel /// Provides access to test results overview
     
-    @State private var refreshID = UUID()
+    @State private var refreshID = UUID() /// Used to force-refresh the grid on test result updates
 
     let fullTests: [FullTests] = [
         FullTests(title: "Full screen", icon: "iphone", testType: .fullScreen)
@@ -36,6 +38,7 @@ struct ScreenOne: View {
 
     var body: some View {
         ScrollView {
+            /// Full Tests Section
             Text("Component Tests")
                 .font(.title2)
                 .bold()
@@ -59,6 +62,7 @@ struct ScreenOne: View {
             }
             .padding()
 
+            /// Single Tests Section
             Text("Single Tests")
                 .font(.title2)
                 .bold()
@@ -86,18 +90,18 @@ struct ScreenOne: View {
             }
             .padding()
         }
-        .id(refreshID)
-        .navigationBarBackButtonHidden(true)
+        .id(refreshID)  /// Force refresh grid when refreshID changes
+        .navigationBarBackButtonHidden(true) /// Hide default back button
         .onAppear {
-            testOverviewVM.loadResults()
+            testOverviewVM.loadResults() /// Reload test results on screen appear
         }
         .onReceive(testOverviewVM.$results) { _ in
-            refreshID = UUID()
+            refreshID = UUID()  /// Trigger view refresh when test results change
         }
     }
 }
 
-#Preview{
+#Preview {
     ScreenOne()
         .environmentObject(NavigationModel())
 }

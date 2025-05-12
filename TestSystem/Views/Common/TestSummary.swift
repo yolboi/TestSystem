@@ -4,15 +4,18 @@
 //
 //  Created by Jarl Boyd Roest on 08/05/2025.
 //
+// View displaying a summary of the device info and test results, with PDF export option
+//
 
 import SwiftUI
 
 struct TestSummaryView: View {
-    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
-    
-    @State private var showShareSheet = false
-    @State private var pdfData: Data?
-    
+    @EnvironmentObject var testOverviewVM: TestOverviewViewModel  /// Access to test results overview
+
+    @State private var showShareSheet = false  /// Controls display of the share sheet
+    @State private var pdfData: Data?  /// Stores the generated PDF data
+
+    /// Get the latest result for each test type, sorted alphabetically
     var latestResults: [TestResult] {
         Dictionary(grouping: testOverviewVM.results) { $0.testType }
             .compactMapValues { $0.sorted(by: { $0.timestamp > $1.timestamp }).first }
@@ -30,6 +33,8 @@ struct TestSummaryView: View {
         
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                
+                /// Device Summary
                 Text("Device Summary")
                     .font(.title)
                     .bold()
@@ -40,6 +45,7 @@ struct TestSummaryView: View {
                 
                 Divider()
                 
+                /// Test Status
                 Text("Test Status")
                     .font(.headline)
                 
@@ -51,6 +57,7 @@ struct TestSummaryView: View {
                 
                 Divider()
                 
+                /// Individual Test Results
                 ForEach(latestResults, id: \.id) { result in
                     HStack {
                         Text(result.testType.rawValue.capitalized)
@@ -63,28 +70,34 @@ struct TestSummaryView: View {
                 
                 Spacer(minLength: 40)
                 
+                /// Export as PDF Button
                 SecondaryButton(title: "Export as PDF") {
-                    let pageSize = CGSize(width: 612, height: 792)
+                    let pageSize = CGSize(width: 612, height: 792) /// A4 size
 
+                    /// Render the TestSummaryView into a PDF using ViewRenderer
                     ViewRenderer.render(view: TestSummaryView().environmentObject(testOverviewVM), size: pageSize) { data in
                         guard let data = data else {
                             print("Failed to generate PDF")
                             return
                         }
-
+                        
+                        /// Save the generated PDF data in state
                         self.pdfData = data
 
-                        // Flyt showShareSheet herind – efter data er klar
+                        /// Show the share sheet after rendering is done
                         DispatchQueue.main.async {
                             self.showShareSheet = true
                         }
 
-                        // Valgfrit: Gem lokalt
+                        /// Create a file name based on the current timestamp
                         let fileName = "TestSummary-\(Int(Date().timeIntervalSince1970)).pdf"
+                        
+                        /// Get the Documents directory URL where the file will be saved
                         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
                         let fileURL = documentsURL.appendingPathComponent(fileName)
 
                         do {
+                            /// Attempt to write the PDF data to disk
                             try data.write(to: fileURL)
                             print("PDF saved to: \(fileURL)")
                         } catch {

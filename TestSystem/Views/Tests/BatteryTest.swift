@@ -4,6 +4,8 @@
 //
 //  Created by Jarl Boyd Roest on 29/04/2025.
 //
+// Simple view returning the test resutls 
+//
 
 import SwiftUI
 
