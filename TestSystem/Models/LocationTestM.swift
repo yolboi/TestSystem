@@ -4,29 +4,21 @@
 //
 //  Created by Jarl Boyd Roest on 24/04/2025.
 //
+// Address and AnnotationItem.
+// They are used for handling addresses and map annotations, helping to represent locations and pins on a map view
 
 import Foundation
 import MapKit
 
 struct Address: Identifiable {
-    let id = UUID()
+    let id = UUID() ///identifier for each address
     let title: String
     let subtitle: String
-    //var coordinate: CLLocationCoordinate2D
 }
 
+/// custom marker on map
 struct AnnotationItem: Identifiable {
-  // Skift fra UUID til String
   let id: String
-  let coordinate: CLLocationCoordinate2D
+  let coordinate: CLLocationCoordinate2D ///Stores the location as a latitude and longitude (from MapKit)
   let title: String
-
-    /*
-  // Convenience initializer
- init(coordinate: CLLocationCoordinate2D, title: String) {
-    self.id = UUID().uuidString
-    self.coordinate = coordinate
-   self.title = title
-  }
-    */
 }

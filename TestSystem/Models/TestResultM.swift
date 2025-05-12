@@ -4,16 +4,19 @@
 //
 //  Created by Jarl Boyd Roest on 02/05/2025.
 //
+//  TestResult represent hardware test outcomes.
+//  Supports creation from Core Data entities, conforms to Identifiable,
+//  Codable, and Hashable for flexible storage and UI handling.
 
 import Foundation
 import CoreData
 
 struct TestResult: Identifiable, Codable, Hashable {
-    let id: UUID
-    let testType: TestType
-    let passed: Bool
+    let id: UUID ///identifier for the test result
+    let testType: TestType ///type of test performed (testType enum)
+    let passed: Bool /// passed or failed
     let timestamp: Date
-    let notes: String?
+    let notes: String? ///optional comment on the testresult
     var confirmed: Bool
 
     init(id: UUID = UUID(),
@@ -31,22 +34,22 @@ struct TestResult: Identifiable, Codable, Hashable {
     }
 }
 
+/// failable initializer, can return nil if data is missing or invalid
 extension TestResult {
-    /// Ny failable init: kun opret hvis alle required felter er gyldige
     init?(from entity: TestResultEntity) {
         guard
-            let id        = entity.id,
-            let rawType   = entity.testType,
-            let type      = TestType(rawValue: rawType),
+            let id = entity.id,
+            let rawType = entity.testType,
+            let type = TestType(rawValue: rawType),
             let timestamp = entity.timestamp
         else {
             return nil
         }
-        self.id        = id
-        self.testType  = type
-        self.passed    = entity.passed
+        self.id = id
+        self.testType = type
+        self.passed = entity.passed
         self.timestamp = timestamp
-        self.notes     = entity.notes
+        self.notes = entity.notes
         self.confirmed = entity.confirmed
     }
 }
