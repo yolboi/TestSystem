@@ -4,6 +4,7 @@
 //
 //  Created by Jarl Boyd Roest on 04/05/2025.
 //
+// Just gets device info and converts iphone models into readable strings 
 
 import UIKit
 
@@ -22,39 +23,6 @@ class DeviceInfoService {
         let identifier = modelIdentifier()
 
         let deviceMap: [String: String] = [
-            // iPhone 1st gen, 3G & 3GS
-               "iPhone1,1": "iPhone 1G",
-               "iPhone1,2": "iPhone 3G",
-               "iPhone2,1": "iPhone 3GS",
-
-               // iPhone 4 & 4S
-               "iPhone3,1": "iPhone 4",
-               "iPhone3,2": "iPhone 4",
-               "iPhone3,3": "iPhone 4",
-               "iPhone4,1": "iPhone 4S",
-
-               // iPhone 5, 5C & 5S
-               "iPhone5,1": "iPhone 5",
-               "iPhone5,2": "iPhone 5",
-               "iPhone5,3": "iPhone 5C",
-               "iPhone5,4": "iPhone 5C",
-               "iPhone6,1": "iPhone 5S",
-               "iPhone6,2": "iPhone 5S",
-
-               // iPhone 6 & 6 Plus
-               "iPhone7,1": "iPhone 6 Plus",
-               "iPhone7,2": "iPhone 6",
-
-               // iPhone 6S & 6S Plus
-               "iPhone8,1": "iPhone 6S",
-               "iPhone8,2": "iPhone 6S Plus",
-               "iPhone8,4": "iPhone SE (1st Gen)",
-
-               // iPhone 7 & 7 Plus
-               "iPhone9,1": "iPhone 7",
-               "iPhone9,2": "iPhone 7 Plus",
-               "iPhone9,3": "iPhone 7",
-               "iPhone9,4": "iPhone 7 Plus",
 
                // iPhone 8, 8 Plus & X
                "iPhone10,1": "iPhone 8",

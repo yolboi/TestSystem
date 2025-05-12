@@ -4,18 +4,20 @@
 //
 //  Created by Jarl Boyd Roest on 06/05/2025.
 //
+// camera session management, live preview, and photo capture.
 
 import AVFoundation
 import UIKit
 
 class CameraService: NSObject, ObservableObject {
-    private var session: AVCaptureSession?
-    private var photoOutput: AVCapturePhotoOutput?
-    private var currentDeviceInput: AVCaptureDeviceInput?
+    private var session: AVCaptureSession? ///manages flow of data from input devices (camera) to outputs (photo capture).
+    private var photoOutput: AVCapturePhotoOutput? ///still image captures
+    private var currentDeviceInput: AVCaptureDeviceInput? ///currently active camera
     
-    @Published var capturedImage: UIImage?
-    @Published var previewLayer: AVCaptureVideoPreviewLayer?
+    @Published var capturedImage: UIImage? ///Stores the latest captured photo
+    @Published var previewLayer: AVCaptureVideoPreviewLayer? /// real-time preview of camera feed
     
+    ///session to use a specific camera (front, back). Creates photo output, and preview of camre feed
     func configureSession(for lensType: AVCaptureDevice.Position) {
         session = AVCaptureSession()
         session?.sessionPreset = .photo
@@ -51,18 +53,20 @@ class CameraService: NSObject, ObservableObject {
         session?.startRunning()
     }
     
+    ///setting session and previewLayer to nil for clean up
     func stopSession() {
         session?.stopRunning()
         session = nil
         previewLayer = nil
     }
     
+    ///capture a still image
     func capturePhoto() {
         let settings = AVCapturePhotoSettings()
         photoOutput?.capturePhoto(with: settings, delegate: self)
     }
     
-    /// Gemmer test-resultat i CoreData via ViewModel
+    /// Saves test result into CoreData via ViewModel. Checks if: images = number of lenses
     func saveResult(capturedImages: [UIImage], expectedCount: Int, to viewModel: TestOverviewViewModel) {
         let passed = capturedImages.count >= expectedCount
         let result = TestResult(
@@ -76,6 +80,7 @@ class CameraService: NSObject, ObservableObject {
     }
 }
 
+///Converts captured photo data into a UIImage
 extension CameraService: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let data = photo.fileDataRepresentation(),

@@ -4,6 +4,8 @@
 //
 //  Created by Jarl Boyd Roest on 10/05/2025.
 //
+//  Provides a service to save the results of the pixel test.
+//  Creates a TestResult and stores it.
 
 import Foundation
 
