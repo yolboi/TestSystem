@@ -4,6 +4,9 @@
 //
 //  Created by Jarl Boyd Roest on 30/03/2025.
 //
+// Defines enums for representing user roles, test types, and step-by-step flows within screen testing.
+// Provides structured and codable types for organizing app navigation and behavior.
+//
 
 import Foundation
 
@@ -25,6 +28,7 @@ enum TestType: String, Codable, Hashable {
     case camera
 }
 
+///Represents the individual steps inside Screen Test
 enum ScreenTestStep: CaseIterable {
     case touch, pixel, threeD, trueTone, done
 

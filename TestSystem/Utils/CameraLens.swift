@@ -4,6 +4,9 @@
 //
 //  Created by Jarl Boyd Roest on 10/05/2025.
 //
+// Defines an enum representing different camera lens types.
+// Provides a mapping to the physical camera position used for capture.
+//
 
 import AVFoundation
 
@@ -12,7 +15,7 @@ enum CameraLens: String, CaseIterable {
     case wide = "Wide"
     case telephoto = "Telephoto"
 
-    /// Hvilket kamera-position skal bruges (alle bag på en iPhone)
+    /// Which camera position should be used (all on the back of an iPhone)
     var capturePosition: AVCaptureDevice.Position {
         return .back
     }
