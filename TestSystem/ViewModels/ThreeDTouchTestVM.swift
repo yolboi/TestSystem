@@ -15,17 +15,17 @@ class ThreeDTouchTestViewModel: ObservableObject {
     @Published var testPassed: Bool? = nil /// Tracks if the user passed or failed the test (initially nil)
 
     /// Marks the test as passed and saves the result
-    func passTest(using overviewVM: TestOverviewViewModel) {
+    func markAsPassed(using overviewVM: TestOverviewViewModel, onComplete: @escaping () -> Void) {
         testPassed = true
         saveResult(passed: true, to: overviewVM)
+        onComplete()
     }
 
     ///Marks the test as failed and saves the result
-    func failTest(using overviewVM: TestOverviewViewModel) {
+    func markAsFailed(using overviewVM: TestOverviewViewModel) {
         testPassed = false
         saveResult(passed: false, to: overviewVM)
     }
-
 
     /// Creates and saves a TestResult for the 3D Touch test
     private func saveResult(passed: Bool, to overviewVM: TestOverviewViewModel) {

@@ -6,26 +6,32 @@
 //
 
 import Foundation
-import Combine
+import UIKit
 
 class TrueToneViewModel: ObservableObject {
-    @Published var confirmed: Bool = false /// Tracks if the user confirmed that True Tone is working
-    
-    private let testService = TrueToneTestService() /// Service responsible for saving the True Tone test result
-    private let testOverviewVM: TestOverviewViewModel /// ViewModel that collects all test results
-    
+    @Published var confirmed: Bool = false
+
+    private let testOverviewVM: TestOverviewViewModel
+
     init(testOverviewVM: TestOverviewViewModel) {
         self.testOverviewVM = testOverviewVM
     }
 
-    /// Called when the user confirms that True Tone is working
-    func didConfirm() {
-        confirmed = true
-        saveResult()
+    /// Gemmer testresultatet
+    func saveResultAndContinue(onComplete: () -> Void) {
+        let result = TestResult(
+            testType: .trueTone,
+            passed: confirmed,
+            timestamp: Date(),
+            notes: confirmed ? nil : "User did not confirm True Tone",
+            confirmed: true
+        )
+        testOverviewVM.addResult(result)
+        onComplete()
     }
 
-    /// Saves the test result to the TestOverviewViewModel
-    private func saveResult() {
-        testService.saveResult(passed: confirmed, to: testOverviewVM)
+    /// Tjekker om skærmen rapporterer understøttelse af P3 (bredt farverum)
+    var supportsWideColor: Bool {
+        UIScreen.main.traitCollection.displayGamut == .P3
     }
 }

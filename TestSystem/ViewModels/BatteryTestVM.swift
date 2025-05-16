@@ -8,21 +8,39 @@
 //
 
 import Foundation
+import Combine
 
 class BatteryTestViewModel: ObservableObject {
-    @Published var batteryLevelText: String = "" ///current battery level as a readable string (e.g., “Battery Level: 85%”)
-    @Published var batteryStateText: String = "" ///current battery state (e.g., “Charging”, “Full”, “Not Charging”)
-    @Published var testPassed: Bool = false
+    @Published var batteryLevelText: String = ""      /// "Battery Level: 85%"
+    @Published var batteryStateText: String = ""      /// "Battery State: Charging"
+    @Published var testPassed: Bool = false           /// Used to determine if test should pass
 
     private let batteryService = BatteryService()
-    private var testOverviewVM: TestOverviewViewModel
+    private var testOverviewVM: TestOverviewViewModel /// Passed in via View
+    private var cancellables = Set<AnyCancellable>()  /// Combine tokens
 
     init(testOverviewVM: TestOverviewViewModel) {
         self.testOverviewVM = testOverviewVM
-        updateBatteryStatus() // opdater UI, men gem IKKE noget
+        bindToBatteryService()
     }
 
-    ///Updates batteryLevelText, batteryStateText, and testPassed based on the current battery status
+    /// Subscribes to BatteryService updates
+    private func bindToBatteryService() {
+        batteryService.$batteryLevel
+            .sink { [weak self] level in
+                self?.batteryLevelText = "Battery Level: \(Int(level * 100))%"
+            }
+            .store(in: &cancellables)
+
+        batteryService.$batteryState
+            .sink { [weak self] state in
+                let readable = self?.batteryService.getBatteryState() ?? "Unknown"
+                self?.batteryStateText = "Battery State: \(readable)"
+                self?.testPassed = (readable == "Charging" || readable == "Full")
+            }
+            .store(in: &cancellables)
+    }
+
     func updateBatteryStatus() {
         let level = batteryService.getBatteryLevel()
         let state = batteryService.getBatteryState()
@@ -32,15 +50,14 @@ class BatteryTestViewModel: ObservableObject {
         testPassed = (state == "Charging" || state == "Full")
     }
 
+    /// Saves test result
     func finishTest() {
-        updateBatteryStatus() ///refreshes the battery status
-
         let result = TestResult(
             testType: .battery,
             passed: testPassed,
             timestamp: Date(),
             notes: testPassed ? nil : "Telefonen blev ikke opladt",
-            confirmed: true // <-- vigtigt!
+            confirmed: true
         )
         print("Saving result: \(result)")
         testOverviewVM.addResult(result)

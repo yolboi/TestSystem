@@ -8,20 +8,21 @@
 import SwiftUI
 
 struct TrueToneView: View {
-    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
     @EnvironmentObject var navModel: NavigationModel
     var onComplete: () -> Void = {}
 
     @StateObject private var viewModel: TrueToneViewModel
 
-    init(onComplete: @escaping () -> Void = {}) {
+    init(testOverviewVM: TestOverviewViewModel, onComplete: @escaping () -> Void = {}) {
         self.onComplete = onComplete
-        _viewModel = StateObject(wrappedValue: TrueToneViewModel(testOverviewVM: TestOverviewViewModel()))
+        _viewModel = StateObject(wrappedValue: TrueToneViewModel(testOverviewVM: testOverviewVM))
     }
 
     var body: some View {
         VStack(spacing: 24) {
-            Text("High probability that the screen has True Tone")
+            Text(viewModel.supportsWideColor
+                 ? "This screen supports wide color (P3). True Tone is likely available."
+                 : "This screen does not support wide color (P3). True Tone may be unavailable.")
                 .font(.title3)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
@@ -45,8 +46,7 @@ struct TrueToneView: View {
                 .padding(.horizontal)
 
             Button(action: {
-                viewModel.didConfirm()
-                onComplete()
+                viewModel.saveResultAndContinue(onComplete: onComplete)
             }) {
                 Text("Continue")
                     .frame(maxWidth: .infinity)

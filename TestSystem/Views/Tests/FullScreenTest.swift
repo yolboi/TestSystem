@@ -35,7 +35,7 @@ struct FullScreenTestView: View {
                     .environmentObject(navModel)
 
             case .trueTone:
-                TrueToneView(onComplete: vm.goToNextStep)
+                TrueToneView(testOverviewVM: testOverviewVM, onComplete: vm.goToNextStep)
                     .environmentObject(testOverviewVM)
                     .environmentObject(navModel)
                 

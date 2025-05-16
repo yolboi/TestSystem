@@ -10,9 +10,9 @@
 import SwiftUI
 
 struct BatteryTestView: View {
-    @StateObject private var viewModel: BatteryTestViewModel
-    @EnvironmentObject var testOverviewVM: TestOverviewViewModel
     @Environment(\.dismiss) var dismiss
+
+    @StateObject private var viewModel: BatteryTestViewModel
 
     init(testOverviewVM: TestOverviewViewModel) {
         _viewModel = StateObject(wrappedValue: BatteryTestViewModel(testOverviewVM: testOverviewVM))
@@ -42,6 +42,7 @@ struct BatteryTestView: View {
 
             Spacer()
 
+            // Update-knap
             Button("Update status") {
                 viewModel.updateBatteryStatus()
             }
@@ -50,8 +51,7 @@ struct BatteryTestView: View {
             .foregroundColor(.white)
             .cornerRadius(8)
 
-            Spacer()
-            
+            // Finish test knap
             SecondaryButton(title: "Finish test") {
                 viewModel.finishTest()
                 dismiss()

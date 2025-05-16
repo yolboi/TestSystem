@@ -41,7 +41,7 @@ struct ContentView: View {
                                 case .shake:
                                     ShakeTestView()
                                 case .trueTone:
-                                    TrueToneView()
+                                    TrueToneView(testOverviewVM: testOverviewVM, onComplete: {})
                                 case .battery:
                                     BatteryTestView(testOverviewVM: testOverviewVM)
                                 case .location:

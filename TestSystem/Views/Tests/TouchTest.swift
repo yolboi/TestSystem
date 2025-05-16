@@ -10,7 +10,6 @@
 import SwiftUI
 
 struct TouchTest: View {
-
     @EnvironmentObject var testOverviewVM: TestOverviewViewModel
     @EnvironmentObject var navModel: NavigationModel
 
@@ -21,7 +20,6 @@ struct TouchTest: View {
 
     var body: some View {
         VStack {
-            /// Touch grid layout
             GeometryReader { geometry in
                 let squareWidth = geometry.size.width / CGFloat(viewModel.columns)
                 let squareHeight = geometry.size.height / CGFloat(viewModel.rows)
@@ -43,7 +41,6 @@ struct TouchTest: View {
                         }
                     }
                 }
-                /// Gesture handling: mark squares when touched
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
@@ -59,20 +56,8 @@ struct TouchTest: View {
             /// Finish Test button
             DefaultButton(title: "Finish Test") {
                 if viewModel.isTestCompleted() {
-                    let result = TestResult(
-                        testType: .screen,
-                        passed: true,
-                        timestamp: Date(),
-                        notes: nil,
-                        confirmed: true
-                    )
-                    testOverviewVM.addResult(result)
-
-                    if let fullVM = fullScreenVM {
-                        fullVM.goToNextStep()
-                    } else {
-                        navModel.path.removeLast()
-                    }
+                    viewModel.saveResult(to: testOverviewVM)
+                    fullScreenVM?.goToNextStep() ?? navModel.path.removeLast()
                 } else {
                     showFailAlert = true
                 }
@@ -86,26 +71,14 @@ struct TouchTest: View {
             Spacer()
         }
         .padding()
-        /// Failure alert if not all squares were touched
         .alert(isPresented: $showFailAlert) {
             Alert(
                 title: Text("Test Failed"),
                 message: Text("Not all squares were touched."),
                 primaryButton: .destructive(Text("Fail Test")) {
-                    let result = TestResult(
-                        testType: .screen,
-                        passed: false,
-                        timestamp: Date(),
-                        notes: "User marked test as failed",
-                        confirmed: true
-                    )
-                    testOverviewVM.addResult(result)
-
-                    if let fullVM = fullScreenVM {
-                        fullVM.goToNextStep()
-                    } else {
-                        navModel.path.removeLast()
-                    }
+                    // Force-fail og gem
+                    viewModel.saveResult(to: testOverviewVM)
+                    fullScreenVM?.goToNextStep() ?? navModel.path.removeLast()
                 },
                 secondaryButton: .cancel(Text("Continue Test"))
             )

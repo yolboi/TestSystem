@@ -16,7 +16,8 @@ struct PixelTestView: View {
 
     @State private var started = false  /// Tracks if the test has started
     @StateObject private var vm: PixelTestViewModel /// ViewModel for managing pixel test state
-
+    
+    var fullScreenVM: FullScreenTestViewModel? = nil
     var onComplete: () -> Void  /// Callback triggered when test is completed
 
     init(testOverviewVM: TestOverviewViewModel, onComplete: @escaping () -> Void) {
@@ -46,6 +47,7 @@ struct PixelTestView: View {
                     DefaultButton(title: "Done") {
                         vm.finishTest()
                         onComplete() /// Call the provided completion handler
+                        fullScreenVM?.goToNextStep() ?? navModel.path.removeLast()
                     }
                     .padding(.top)
                 }
